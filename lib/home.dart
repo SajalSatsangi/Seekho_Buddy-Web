@@ -23,8 +23,8 @@ class HomePage extends StatelessWidget {
       title: 'SeekhoBuddy App',
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Color.fromARGB(255, 0, 0, 0),
-        textTheme: TextTheme(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.white),
           bodyMedium: TextStyle(color: Colors.white),
         ),
@@ -59,19 +59,19 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.chat),
             label: 'Chat',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -81,8 +81,8 @@ class _HomeState extends State<Home> {
         onTap: _onItemTapped,
         backgroundColor: Colors.black,
         unselectedItemColor: Colors.white,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -107,11 +107,11 @@ class ExploreScreen extends StatelessWidget {
   Future<void> _showLogoutDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // User must tap a button to dismiss the dialog
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Logout'),
-          content: SingleChildScrollView(
+          title: const Text('Confirm Logout'),
+          content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Are you sure you want to log out?'),
@@ -120,13 +120,13 @@ class ExploreScreen extends StatelessWidget {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Logout'),
+              child: const Text('Logout'),
               onPressed: () {
                 Navigator.of(context).pop();
                 _logout(context);
@@ -144,275 +144,145 @@ class ExploreScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(
-                'Explore & Connect',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * 0.065,
-                  color: Colors.white,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
+        title: const Text(
+          'Explore & Connect',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            color: Colors.white,
+          ),
         ),
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.power_settings_new,
-              color: Colors.grey, // Change this to your desired color
+              color: Colors.grey,
             ),
             onPressed: () => _showLogoutDialog(context),
             tooltip: 'Log Out',
-            padding: EdgeInsets.only(right: 25.0),
+            padding: const EdgeInsets.only(right: 25.0),
           ),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    height: MediaQuery.of(context).size.height * 0.18,
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(87, 162, 162, 162),
-                      borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.width * 0.05),
-                      border: Border.all(
-                        color: Color.fromARGB(255, 107, 107, 107),
-                        width: 2.0,
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.05,
-                                  top: MediaQuery.of(context).size.height *
-                                      0.03),
-                              child: Text(
-                                'Explore study Materials',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.038,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.005),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.05),
-                              child: Text(
-                                'best study materials for you',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.028,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.01),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.06,
-                                  top: MediaQuery.of(context).size.height *
-                                      0.005),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.25,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Courses()),
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                      Color.fromARGB(255, 255, 255, 255),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'View',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                      fontSize: 100.0 * 0.14,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Positioned(
-                          top: MediaQuery.of(context).size.height * 0.040,
-                          right: MediaQuery.of(context).size.width * 0.05,
-                          child: SvgPicture.asset(
-                            'assets/undraw_online_test_re_kyfx.svg',
-                            height: MediaQuery.of(context).size.height * 0.08,
-                            width: MediaQuery.of(context).size.height * 0.08,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.025,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      right: MediaQuery.of(context).size.width * 0.01),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1200),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildCard(context, 'Explore More',
-                              'assets/Resource.svg', ComingSoonScreen()),
-                          _buildCard(context, 'Notices', 'assets/Job.svg',
-                              NoticesAdmin()),
-                        ],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.0001,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildCard(context, 'Projects',
-                              'assets/Professional.svg', ComingSoonScreen()),
-                          _buildCard(context, 'Networking',
-                              'assets/Network.svg', ComingSoonScreen()),
-                        ],
-                      ),
+                      _buildStudyMaterialsCard(context, isDesktop),
+                      const SizedBox(height: 32),
+                      _buildCardGrid(context, isDesktop),
+                      const SizedBox(height: 32),
+                      _buildButtonRow(context, isDesktop),
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.04,
-                          top: MediaQuery.of(context).size.height * 0.025),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.41,
-                        height: MediaQuery.of(context).size.height * 0.055,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DonationPage()),
-                            );
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromARGB(255, 93, 93, 93),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Donate',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 252, 251, 251),
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                ),
-                              ),
-                              SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.01),
-                              Icon(
-                                Icons.badge,
-                                color: Color.fromARGB(255, 252, 251, 251),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.02,
-                          top: MediaQuery.of(context).size.height * 0.025),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        height: MediaQuery.of(context).size.height * 0.055,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Newhelp()),
-                            );
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromARGB(255, 93, 93, 93),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Help',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 252, 251, 251),
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                ),
-                              ),
-                              SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.01),
-                              Icon(
-                                Icons.help,
-                                color: Color.fromARGB(255, 252, 251, 251),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildCard(
-      BuildContext context, String title, String assetPath, Widget nextPage) {
+  Widget _buildStudyMaterialsCard(BuildContext context, bool isDesktop) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(87, 162, 162, 162),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color.fromARGB(255, 107, 107, 107),
+          width: 2.0,
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Explore study Materials',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: isDesktop ? 24 : 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Best study materials for you',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: isDesktop ? 18 : 16,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Courses()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                  child: Text(
+                    'Start learning',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: isDesktop ? 18 : 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 24),
+          SvgPicture.asset(
+            'assets/undraw_online_test_re_kyfx.svg',
+            height: isDesktop ? 150 : 100,
+            width: isDesktop ? 150 : 100,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCardGrid(BuildContext context, bool isDesktop) {
+    final cardWidth = isDesktop ? 250.0 : 160.0;
+    final cardHeight = isDesktop ? 200.0 : 160.0;
+
+    return Padding(
+      padding: EdgeInsets.only(left: isDesktop ? 20.0 : 5.0), // Add left margin for desktop, no margin for mobile
+      child: Wrap(
+        spacing: 30,
+        runSpacing: 16,
+        alignment: WrapAlignment.center,
+        children: [
+          _buildCard(context, 'Explore More', 'assets/Resource.svg', ComingSoonScreen(), cardWidth, cardHeight),
+          _buildCard(context, 'Notices', 'assets/Job.svg', NoticesAdmin(), cardWidth, cardHeight),
+          _buildCard(context, 'Projects', 'assets/Professional.svg', ComingSoonScreen(), cardWidth, cardHeight),
+          _buildCard(context, 'Networking', 'assets/Network.svg', ComingSoonScreen(), cardWidth, cardHeight),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCard(BuildContext context, String title, String assetPath, Widget nextPage, double width, double height) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -420,40 +290,80 @@ class ExploreScreen extends StatelessWidget {
           MaterialPageRoute(builder: (context) => nextPage),
         );
       },
-      child: Padding(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.4,
-          height: MediaQuery.of(context).size.height * 0.2,
-          decoration: BoxDecoration(
-            color: Color(0xFF212121),
-            borderRadius:
-                BorderRadius.circular(MediaQuery.of(context).size.width * 0.05),
-            border: Border.all(
-              color: Color(0xFF212121),
-              width: MediaQuery.of(context).size.width * 0.01,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: const Color(0xFF212121),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: const Color(0xFF212121),
+            width: 2,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              assetPath,
+              height: height * 0.4,
+              width: height * 0.4,
             ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                assetPath,
-                height: MediaQuery.of(context).size.height * 0.1,
-                width: MediaQuery.of(context).size.width * 0.1,
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-              Text(
-                title,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * 0.04,
-                ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildButtonRow(BuildContext context, bool isDesktop) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildButton(context, 'Donate', Icons.badge, const DonationPage(), isDesktop),
+        const SizedBox(width: 50),
+        _buildButton(context, 'Help', Icons.help, Newhelp(), isDesktop),
+        const SizedBox(width: 0), // Add spacing between the buttons
+      ],
+    );
+  }
+  Widget _buildButton(BuildContext context, String title, IconData icon, Widget nextPage, bool isDesktop) {
+    return SizedBox(
+      width: isDesktop ? 200 : 150,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => nextPage),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 93, 93, 93),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: isDesktop ? 18 : 16,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              icon,
+              color: Colors.white,
+            ),
+          ],
         ),
       ),
     );
