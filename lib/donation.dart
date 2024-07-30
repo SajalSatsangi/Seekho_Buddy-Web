@@ -76,9 +76,6 @@ class _DonationPageState extends State<DonationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -86,7 +83,6 @@ class _DonationPageState extends State<DonationPage> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
-            fontSize: screenWidth * 0.05,
           ),
         ),
         leading: IconButton(
@@ -95,184 +91,191 @@ class _DonationPageState extends State<DonationPage> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor:
-            const Color(0xFF000000), // Set the background color to black
+        backgroundColor: const Color(0xFF000000),
       ),
       backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                padding:
-                    EdgeInsets.all(screenWidth * 0.04), // Responsive padding
-                decoration: BoxDecoration(
-                  color: Color(0xFF323232),
-                  borderRadius: BorderRadius.circular(
-                      screenWidth * 0.05), // Responsive rounded corners
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: screenHeight * 0.015), // Responsive height
-                    Text(
-                      'You are stepping toward wellbeing, we thank you for your contribution',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.04, // Responsive font size
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02), // Responsive height
-                    Text(
-                      'Donate Methods',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.04,
-                        fontWeight: FontWeight.bold, // Responsive font size
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.015), // Responsive height
-                    Text(
-                      'Give us a brief description of what you are donating to us so that we can put the resources in an appropriate section. We thank you for your help to your juniors.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.04, // Responsive font size
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.015), // Responsive height
-                    Text(
-                      'There are two ways you can give us your resources and help:',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.04, // Responsive font size
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.015), // Responsive height
-                    Text(
-                      'Through Google Drive',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.04, // Responsive font size
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.015), // Responsive height
-                    Text(
-                      'You can upload your material on your drive, make it public, and send us your drive link.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.04, // Responsive font size
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.015), // Responsive height
-                    Text(
-                      'Through Upload',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.04, // Responsive font size
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.015), // Responsive height
-                    Text(
-                      'You can upload your pdfs directly here',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.04, // Responsive font size
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.03), // Responsive height
-                    buildTextField(
-                      context,
-                      'Description (tell us about whatever you are donating to us in brief)',
-                      screenWidth,
-                      screenHeight,
-                      maxLines: 5,
-                      controller: descriptionController,
-                    ),
-                    SizedBox(height: screenHeight * 0.001), // Responsive height
-                    buildTextField(
-                      context,
-                      'Drive Link',
-                      screenWidth,
-                      screenHeight,
-                      controller: driveLinkController,
-                    ),
-                    SizedBox(height: screenHeight * 0), // Responsive height
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Implement your image upload logic here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 0, 0, 0),
-                        shape: RoundedRectangleBorder(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 1200),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(isDesktop ? 32 : 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(isDesktop ? 32 : 16),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF323232),
                           borderRadius:
-                              BorderRadius.circular(screenWidth * 0.05),
+                              BorderRadius.circular(isDesktop ? 20 : 10),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(height: isDesktop ? 24 : 16),
+                            Text(
+                              'You are stepping toward wellbeing, we thank you for your contribution',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop ? 18 : 16,
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 32 : 24),
+                            Text(
+                              'Donate Methods',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop ? 24 : 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 24 : 16),
+                            Text(
+                              'Give us a brief description of what you are donating to us so that we can put the resources in an appropriate section. We thank you for your help to your juniors.',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop ? 18 : 16,
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 24 : 16),
+                            Text(
+                              'There are two ways you can give us your resources and help:',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop ? 18 : 16,
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 24 : 16),
+                            Text(
+                              'Through Google Drive',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop ? 18 : 16,
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 16 : 8),
+                            Text(
+                              'You can upload your material on your drive, make it public, and send us your drive link.',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop ? 18 : 16,
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 24 : 16),
+                            Text(
+                              'Through Upload',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop ? 18 : 16,
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 16 : 8),
+                            Text(
+                              'You can upload your pdfs directly here',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop ? 18 : 16,
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 48 : 32),
+                            buildTextField(
+                              context,
+                              'Description (tell us about whatever you are donating to us in brief)',
+                              isDesktop,
+                              maxLines: 5,
+                              controller: descriptionController,
+                            ),
+                            SizedBox(height: isDesktop ? 24 : 16),
+                            buildTextField(
+                              context,
+                              'Drive Link',
+                              isDesktop,
+                              controller: driveLinkController,
+                            ),
+                            SizedBox(height: isDesktop ? 24 : 16),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                // Implement your image upload logic here
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color.fromARGB(255, 0, 0, 0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      isDesktop ? 20 : 10),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isDesktop ? 32 : 16,
+                                  vertical: isDesktop ? 16 : 8,
+                                ),
+                              ),
+                              icon:
+                                  Icon(Icons.file_upload, color: Colors.white),
+                              label: Text(
+                                'Upload Pdf',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: isDesktop ? 18 : 16,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: isDesktop ? 32 : 24),
+                            buildTextField(
+                              context,
+                              'Tell us about the subjectname of the material and type of material',
+                              isDesktop,
+                              controller: otherInfoController,
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(top: isDesktop ? 64 : 32),
+                              child: Center(
+                                child: ElevatedButton(
+                                  onPressed: submitDonation,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 0, 0, 0),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          isDesktop ? 20 : 10),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: isDesktop ? 64 : 32,
+                                      vertical: isDesktop ? 24 : 16,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Donate Now',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      fontSize: isDesktop ? 20 : 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      icon: Icon(Icons.file_upload, color: Colors.white),
-                      label: Text(
-                        'Upload Pdf',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: screenWidth * 0.04,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    buildTextField(
-                      context,
-                      'Tell us about the subjectname of the material and type of material',
-                      screenWidth,
-                      screenHeight,
-                      controller: otherInfoController,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: screenHeight * 0.04), // Responsive padding
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: submitDonation,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 0, 0, 0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(screenWidth *
-                                  0.05), // Responsive rounded corners
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  screenWidth * 0.1, // Responsive padding
-                              vertical:
-                                  screenHeight * 0.02, // Responsive padding
-                            ),
-                          ),
-                          child: Text(
-                            'Donate Now',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              fontSize:
-                                  screenWidth * 0.04, // Responsive font size
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget buildTextField(BuildContext context, String hintText,
-      double screenWidth, double screenHeight,
+  Widget buildTextField(BuildContext context, String hintText, bool isDesktop,
       {int maxLines = 1, TextEditingController? controller}) {
     return Container(
-      margin: EdgeInsets.only(bottom: screenHeight * 0.02), // Responsive margin
+      margin: EdgeInsets.only(bottom: isDesktop ? 32 : 16),
       child: TextField(
         controller: controller,
         maxLines: maxLines,
@@ -280,19 +283,18 @@ class _DonationPageState extends State<DonationPage> {
           hintText: hintText,
           hintStyle: TextStyle(
             color: Colors.grey,
-            fontSize: screenWidth * 0.04, // Responsive font size
+            fontSize: isDesktop ? 18 : 16,
           ),
           filled: true,
           fillColor: Colors.black,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-                screenWidth * 0.05), // Responsive rounded corners
+            borderRadius: BorderRadius.circular(isDesktop ? 20 : 10),
             borderSide: BorderSide.none,
           ),
         ),
         style: TextStyle(
           color: Colors.white,
-          fontSize: screenWidth * 0.04, // Responsive font size
+          fontSize: isDesktop ? 18 : 16,
         ),
       ),
     );
