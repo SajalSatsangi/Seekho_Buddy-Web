@@ -31,59 +31,76 @@ class Faculties extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          "Faculties",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        toolbarHeight: 0, // Set to 0 to remove the AppBar space
       ),
       backgroundColor: Colors.black,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isDesktop = constraints.maxWidth > 600;
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 1200),
-              child: Padding(
-                padding: EdgeInsets.only(top: 20.0),
-                child: FutureBuilder<List<QueryDocumentSnapshot>>(
-                  future: fetchData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}',
-                            style: TextStyle(color: Colors.white)),
-                      );
-                    }
-                    final documents = snapshot.data;
-                    return ListView.builder(
-                      itemCount: documents?.length,
-                      itemBuilder: (context, index) {
-                        final document = documents?[index];
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isDesktop ? 50.0 : 20.0,
-                            vertical: 8.0,
-                          ),
-                          child: _buildFacultyItem(context, document, index, isDesktop),
+          return Stack(
+            children: [
+              Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1200),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: isDesktop ? 80.0 : 60.0, // Increased top padding to make room for the custom header
+                      left: isDesktop ? 50.0 : 20.0,
+                      right: isDesktop ? 50.0 : 20.0,
+                    ),
+                    child: FutureBuilder<List<QueryDocumentSnapshot>>(
+                      future: fetchData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Error: ${snapshot.error}',
+                                style: const TextStyle(color: Colors.white)),
+                          );
+                        }
+                        final documents = snapshot.data;
+                        return ListView.builder(
+                          itemCount: documents?.length,
+                          itemBuilder: (context, index) {
+                            final document = documents?[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: _buildFacultyItem(context, document, index, isDesktop),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Positioned(
+                top: isDesktop ? 20.0 : 10.0,
+                left: isDesktop ? 240.0 : 20.0,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      "Faculties",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -95,11 +112,11 @@ class Faculties extends StatelessWidget {
               snapshot.data == "admin") {
             return FloatingActionButton(
               onPressed: () => _showAddMaterialDialog(context),
-              child: Icon(Icons.add, color: Colors.white),
-              backgroundColor: Color(0xFF323232),
+              child: const Icon(Icons.add, color: Colors.white),
+              backgroundColor: const Color(0xFF323232),
             );
           }
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         },
       ),
     );
@@ -112,13 +129,13 @@ class Faculties extends StatelessWidget {
         width: double.infinity,
         height: isDesktop ? 160 : 120,
         decoration: BoxDecoration(
-          color: Color(0xFF323232),
+          color: const Color(0xFF323232),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.horizontal(left: Radius.circular(20)),
+              borderRadius: const BorderRadius.horizontal(left: Radius.circular(20)),
               child: Image.asset(
                 _getFacultyImage(index),
                 width: isDesktop ? 160 : 120,
@@ -200,17 +217,17 @@ class Faculties extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add Faculty'),
+          title: const Text('Add Faculty'),
           content: TextField(
             controller: _facultyNameController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Enter Faculty Name',
             ),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () async {
@@ -224,7 +241,7 @@ class Faculties extends StatelessWidget {
                 }
                 Navigator.of(context).pop();
               },
-              child: Text('Add'),
+              child: const Text('Add'),
             ),
           ],
         );
