@@ -1,1 +1,51 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"seekhobuddy","appId":"1:379236444299:android:a459467fd36b29e5228c8e","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"seekhobuddy","appId":"1:379236444299:ios:45bf742ea111f743228c8e","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"seekhobuddy","appId":"1:379236444299:ios:1da64bd98265ff73228c8e","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"seekhobuddy","configurations":{"android":"1:379236444299:android:a459467fd36b29e5228c8e","ios":"1:379236444299:ios:45bf742ea111f743228c8e","macos":"1:379236444299:ios:1da64bd98265ff73228c8e","web":"1:379236444299:web:34f8654afc4420f0228c8e","windows":"1:379236444299:web:c7196176991b6e93228c8e"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "seekhobuddy",
+          "appId": "1:379236444299:android:a459467fd36b29e5228c8e",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "seekhobuddy",
+          "appId": "1:379236444299:ios:45bf742ea111f743228c8e",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "seekhobuddy",
+          "appId": "1:379236444299:ios:1da64bd98265ff73228c8e",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "seekhobuddy",
+          "configurations": {
+            "android": "1:379236444299:android:a459467fd36b29e5228c8e",
+            "ios": "1:379236444299:ios:45bf742ea111f743228c8e",
+            "macos": "1:379236444299:ios:1da64bd98265ff73228c8e",
+            "web": "1:379236444299:web:34f8654afc4420f0228c8e",
+            "windows": "1:379236444299:web:c7196176991b6e93228c8e"
+          }
+        }
+      }
+    }
+  },
+  "storage": {
+    "rules": "storage.rules",
+    "cors": [
+      {
+        "origin": ["https://seekho-buddy.vercel.app"],
+        "method": ["GET"],
+        "maxAgeSeconds": 3600
+      }
+    ]
+  }
+}
