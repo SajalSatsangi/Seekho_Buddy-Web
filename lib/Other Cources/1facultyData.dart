@@ -29,51 +29,6 @@ class Faculties extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _showAddMaterialDialog() {
-      final TextEditingController _facultyNameController =
-          TextEditingController();
-      final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Add Faculty'),
-            content: TextField(
-              controller: _facultyNameController,
-              decoration: InputDecoration(
-                hintText: 'Enter Faculty Name',
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  // Handle the action when "Add" is pressed
-                  String facultyName = _facultyNameController.text;
-                  if (facultyName.isNotEmpty) {
-                    // Update the Firebase Firestore
-                    await _firestore
-                        .collection('seekhobuddydb')
-                        .doc(facultyName)
-                        .set({'facultyName': facultyName, 'branches': {}},
-                            SetOptions(merge: true));
-                  }
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: Text('Add'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -91,151 +46,189 @@ class Faculties extends StatelessWidget {
         backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: EdgeInsets.only(top: 20.0), // Adjust the padding as needed
-        child: FutureBuilder<List<QueryDocumentSnapshot>>(
-          future: fetchData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}',
-                    style: TextStyle(color: Colors.white)),
-              );
-            }
-            final documents = snapshot.data;
-            return ListView.builder(
-              itemCount: documents?.length,
-              itemBuilder: (context, index) {
-                final document = documents?[index];
-                print(
-                    'Document ID: ${document?.id}'); // This will print the document ID
-
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 50.0, vertical: 8.0),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 2,
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF323232),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(20)),
-                            child: Image.asset(
-                              index == 3
-                                  ? 'assets/comm.png'
-                                  : index == 1
-                                      ? 'assets/edu.png'
-                                      : index == 0
-                                          ? 'assets/eng.png'
-                                          : index == 2
-                                              ? 'assets/art.png'
-                                              : index == 4
-                                                  ? 'assets/eng.png'
-                                                  : index == 5
-                                                      ? 'assets/sci.png'
-                                                      : index == 6
-                                                          ? 'assets/tec.png'
-                                                          : 'assets/search_result.png',
-                              width: 131,
-                              height: 131,
-                              fit: BoxFit.cover,
-                            ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 1200),
+              child: Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: FutureBuilder<List<QueryDocumentSnapshot>>(
+                  future: fetchData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}',
+                            style: TextStyle(color: Colors.white)),
+                      );
+                    }
+                    final documents = snapshot.data;
+                    return ListView.builder(
+                      itemCount: documents?.length,
+                      itemBuilder: (context, index) {
+                        final document = documents?[index];
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isDesktop ? 50.0 : 20.0,
+                            vertical: 8.0,
                           ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.05),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                    height: MediaQuery.of(context).size.width *
-                                        0.03),
-                                Text(
-                                  document?.id ?? '',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.045,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Container(
-                                  height: 30.0,
-                                  width: 75.0,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (snapshot.hasData) {
-                                        String role =
-                                            await getUserRole(); // Correctly get the user role
-                                        Navigator.push(
-                                          context,
-                                          SlideRightPageRoute(
-                                            page: Branches(
-                                              facultyName: document?.id ?? '',
-                                              facultyData: document?.data()
-                                                  as Map<String, dynamic>,
-                                              role:
-                                                  role, // Pass the role variable here
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.white),
-                                    ),
-                                    child: Text(
-                                      'View',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
+                          child: _buildFacultyItem(context, document, index, isDesktop),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
       ),
       floatingActionButton: FutureBuilder<String>(
-        future: getUserRole(), // Call getUserRole here
+        future: getUserRole(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData && snapshot.data == "admin") {
-              return FloatingActionButton(
-                onPressed: () => _showAddMaterialDialog(),
-                child: Icon(Icons.add, color: Colors.white),
-                backgroundColor: Color(0xFF323232),
-              );
-            }
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData &&
+              snapshot.data == "admin") {
+            return FloatingActionButton(
+              onPressed: () => _showAddMaterialDialog(context),
+              child: Icon(Icons.add, color: Colors.white),
+              backgroundColor: Color(0xFF323232),
+            );
           }
-          // Return an empty container if user role is not admin or data is not yet available
           return SizedBox.shrink();
         },
       ),
+    );
+  }
+
+  Widget _buildFacultyItem(BuildContext context, QueryDocumentSnapshot? document, int index, bool isDesktop) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        width: double.infinity,
+        height: isDesktop ? 160 : 120,
+        decoration: BoxDecoration(
+          color: Color(0xFF323232),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.horizontal(left: Radius.circular(20)),
+              child: Image.asset(
+                _getFacultyImage(index),
+                width: isDesktop ? 160 : 120,
+                height: isDesktop ? 160 : 120,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(width: isDesktop ? 20 : 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    document?.id ?? '',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: isDesktop ? 24 : 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: isDesktop ? 16 : 8),
+                  ElevatedButton(
+                    onPressed: () async {
+                      String role = await getUserRole();
+                      Navigator.push(
+                        context,
+                        SlideRightPageRoute(
+                          page: Branches(
+                            facultyName: document?.id ?? '',
+                            facultyData: document?.data() as Map<String, dynamic>,
+                            role: role,
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isDesktop ? 30 : 20,
+                        vertical: isDesktop ? 15 : 10,
+                      ),
+                    ),
+                    child: Text(
+                      'View',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: isDesktop ? 18 : 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getFacultyImage(int index) {
+    switch (index) {
+      case 0: return 'assets/eng.png';
+      case 1: return 'assets/edu.png';
+      case 2: return 'assets/art.png';
+      case 3: return 'assets/comm.png';
+      case 4: return 'assets/eng.png';
+      case 5: return 'assets/sci.png';
+      case 6: return 'assets/tec.png';
+      default: return 'assets/search_result.png';
+    }
+  }
+
+  void _showAddMaterialDialog(BuildContext context) {
+    final TextEditingController _facultyNameController = TextEditingController();
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add Faculty'),
+          content: TextField(
+            controller: _facultyNameController,
+            decoration: InputDecoration(
+              hintText: 'Enter Faculty Name',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                String facultyName = _facultyNameController.text;
+                if (facultyName.isNotEmpty) {
+                  await _firestore
+                      .collection('seekhobuddydb')
+                      .doc(facultyName)
+                      .set({'facultyName': facultyName, 'branches': {}},
+                          SetOptions(merge: true));
+                }
+                Navigator.of(context).pop();
+              },
+              child: Text('Add'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -245,18 +238,8 @@ class SlideRightPageRoute extends PageRouteBuilder {
 
   SlideRightPageRoute({required this.page})
       : super(
-          pageBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) =>
-              page,
-          transitionsBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) {
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(
               position: Tween<Offset>(
                 begin: const Offset(1.0, 0.0),
