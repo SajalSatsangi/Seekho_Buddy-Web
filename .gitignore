@@ -29,7 +29,18 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+# Ignore everything in the build folder
+/build/*
+
+# But not the web folder
+!/build/web
+
+# Ignore everything in the web folder
+/build/web/*
+
+# But not the contents of the web folder
+!/build/web/*
+
 
 # Symbolication related
 app.*.symbols

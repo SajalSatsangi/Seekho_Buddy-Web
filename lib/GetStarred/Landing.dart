@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:seekhobuddy/LoginPage.dart';
+import 'package:pwa_install/pwa_install.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(LandingPage());
 }
 
@@ -13,8 +15,8 @@ class LandingPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: TextTheme(
-          bodyLarge: TextStyle(color: Colors.white), // Set text color to white
-          bodyMedium: TextStyle(color: Colors.white), // Set text color to white
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white),
         ),
       ),
       home: StudyHubScreen(),
@@ -22,12 +24,19 @@ class LandingPage extends StatelessWidget {
   }
 }
 
-class StudyHubScreen extends StatelessWidget {
+class StudyHubScreen extends StatefulWidget {
+  @override
+  _StudyHubScreenState createState() => _StudyHubScreenState();
+}
+
+class _StudyHubScreenState extends State<StudyHubScreen> {
   final TextStyle appBarTextStyle = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
     color: Colors.white,
   );
+
+  String? error;
 
   @override
   Widget build(BuildContext context) {
@@ -45,41 +54,60 @@ class StudyHubScreen extends StatelessWidget {
               style: appBarTextStyle,
             ),
             backgroundColor: Color(0xFF161616),
-            centerTitle: true, // Center the title horizontally
+            centerTitle: true,
           ),
           body: SingleChildScrollView(
             padding: EdgeInsets.all(padding),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  'assets/Get_Start.png', // Ensure this path is correct
-                  width: imageWidth, // Responsive width
-                  height: imageHeight, // Responsive height
+                  'assets/Get_Start.png',
+                  width: imageWidth,
+                  height: imageHeight,
                 ),
                 SizedBox(height: padding / 2),
                 Text(
                   'Welcome to Our Seekho Buddy App!',
                   style: TextStyle(
-                    fontSize:
-                        constraints.maxWidth * 0.06, // Responsive font size
+                    fontSize: constraints.maxWidth * 0.06,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: padding / 4), // Decreased gap
+                SizedBox(height: padding / 4),
                 Text(
-                  'Discover a world of study material at your fingertips connect with other students, access previous year question papers, notes and books.Join Study groups for collabrative learning experience',
+                  'Discover a world of study material at your fingertips connect with other students, access previous year question papers, notes and books. Join Study groups for collaborative learning experience',
                   style: TextStyle(
-                    fontSize:
-                        constraints.maxWidth * 0.04, // Responsive font size
+                    fontSize: constraints.maxWidth * 0.04,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: padding),
+                Text('Launch Mode: ${PWAInstall().launchMode?.shortLabel}'),
+                Text('Has Install Prompt: ${PWAInstall().hasPrompt}'),
+                if(PWAInstall().installPromptEnabled)
+                  ElevatedButton(
+                    onPressed: () {
+                      try {
+                        PWAInstall().promptInstall_();
+                      } catch (e) {
+                        setState(() {
+                          error = e.toString();
+                        });
+                      }
+                    },
+                    child: Text('Install as App'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                    ),
+                  ),
+                if (error != null) Text(error!, style: TextStyle(color: Colors.red)),
+                SizedBox(height: padding),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate to LandingPage2 with slide animation
                     Navigator.push(
                       context,
                       PageRouteBuilder(
@@ -104,8 +132,8 @@ class StudyHubScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // background (button) color
-                    foregroundColor: Colors.black, // foreground (text) color
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
                   ),
                   child: Text('Start learning'),
                 ),

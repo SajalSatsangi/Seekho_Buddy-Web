@@ -8,12 +8,16 @@ import 'firebase_options.dart';
 import 'home.dart';
 import 'Getstarred/landing.dart';
 import 'emailVerificationWaiting.dart';
+import 'package:pwa_install/pwa_install.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  PWAInstall().setup(installCallback: () {
+    debugPrint('APP INSTALLED!');
+  });
   runApp(MyApp());
 }
 
