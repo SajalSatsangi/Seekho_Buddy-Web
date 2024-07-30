@@ -56,21 +56,21 @@ class _SubjectsPageState extends State<SubjectsPage> {
           .get();
 
       if (docSnapshot.exists) {
-  var facultyData = docSnapshot.data() as Map<String, dynamic>;
-  var branches = facultyData['branches'] as Map<String, dynamic>;
-  var subfacultyData = branches[subfaculty] as Map<String, dynamic>;
-  var semesterData = subfacultyData[semester] as Map<String, dynamic>;
+        var facultyData = docSnapshot.data() as Map<String, dynamic>;
+        var branches = facultyData['branches'] as Map<String, dynamic>;
+        var subfacultyData = branches[subfaculty] as Map<String, dynamic>;
+        var semesterData = subfacultyData[semester] as Map<String, dynamic>;
 
-  // Remove the 'semesterName' key-value pair from the map
-  semesterData.remove('semesterName');
+        // Remove the 'semesterName' key-value pair from the map
+        semesterData.remove('semesterName');
 
-  setState(() {
-    subjects = semesterData;
-  });
-  print(subjects);
-} else {
-  print('Document does not exist on the database');
-}
+        setState(() {
+          subjects = semesterData;
+        });
+        print(subjects);
+      } else {
+        print('Document does not exist on the database');
+      }
     }
   }
 
@@ -95,112 +95,129 @@ class _SubjectsPageState extends State<SubjectsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 1200),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Navigate back
-                        },
+                  SafeArea(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isDesktop ? 32 : 16,
+                        vertical: isDesktop ? 20 : 10,
                       ),
-                      SizedBox(
-                        width: 10.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.arrow_back_ios,
+                                    color: Colors.white),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              SizedBox(width: isDesktop ? 20 : 10),
+                              Text(
+                                "Subjects",
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 36 : 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Subjects",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white, // Text color
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isDesktop ? 32 : 14,
+                      vertical: isDesktop ? 20 : 14,
+                    ),
+                    child: TextField(
+                      onChanged: _updateSearchQuery,
+                      decoration: InputDecoration(
+                        hintText: "Search...",
+                        hintStyle: TextStyle(color: Colors.white),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                          size: isDesktop ? 24 : 20,
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFF323232),
+                        contentPadding: EdgeInsets.all(isDesktop ? 16 : 8),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Color(0xFF323232)),
                         ),
                       ),
-                    ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(isDesktop ? 30 : 15),
+                      child: ListView.builder(
+                        itemCount: _filterSubjects().length,
+                        itemBuilder: (context, index) {
+                          String subjectName = _filterSubjects()[index];
+                          return Padding(
+                            padding:
+                                EdgeInsets.only(bottom: isDesktop ? 30 : 20),
+                            child: _buildBox(
+                              icon: Icons.notes_rounded,
+                              title: subjectName,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  _createRoute(Materialsectionpage(
+                                    subjectData: subjects[subjectName]
+                                        as Map<String, dynamic>,
+                                    allData: subjects,
+                                    subjectName: subjectName,
+                                  )),
+                                );
+                              },
+                              isDesktop: isDesktop,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 14, left: 14, right: 14),
-            child: TextField(
-              onChanged: _updateSearchQuery,
-              decoration: InputDecoration(
-                hintText: "Search...",
-                hintStyle: TextStyle(color: Colors.white),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                  size: 20,
-                ),
-                filled: true,
-                fillColor: Color(0xFF323232),
-                contentPadding: EdgeInsets.all(8),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Color(0xFF323232)),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ListView.builder(
-                itemCount: _filterSubjects().length,
-                itemBuilder: (context, index) {
-                  String subjectName = _filterSubjects()[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: _buildBox(
-                      icon: Icons.notes_rounded,
-                      title: subjectName,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          _createRoute(Materialsectionpage(
-                            subjectData:
-                                subjects[subjectName] as Map<String, dynamic>,
-                            allData: subjects,
-                            subjectName: subjectName,
-                          )),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
-  // Method to build subject box widget
   Widget _buildBox({
     required IconData icon,
     required String title,
     required VoidCallback onTap,
+    required bool isDesktop,
   }) {
     return GestureDetector(
       child: Container(
-        width: 350,
-        height: 80,
+        width: double.infinity,
+        height: isDesktop ? 100 : 80,
         decoration: BoxDecoration(
           color: Color.fromRGBO(50, 50, 50, 1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(isDesktop ? 30 : 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -209,13 +226,14 @@ class _SubjectsPageState extends State<SubjectsPage> {
                   Icon(
                     icon,
                     color: Colors.white,
+                    size: isDesktop ? 28 : 24,
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: isDesktop ? 16 : 8),
                   Text(
                     title,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17.0,
+                      fontSize: isDesktop ? 20 : 17,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -224,8 +242,13 @@ class _SubjectsPageState extends State<SubjectsPage> {
               ElevatedButton(
                 onPressed: onTap,
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.white,
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                    EdgeInsets.symmetric(
+                      horizontal: isDesktop ? 24 : 16,
+                      vertical: isDesktop ? 12 : 8,
+                    ),
                   ),
                 ),
                 child: Text(
@@ -233,6 +256,7 @@ class _SubjectsPageState extends State<SubjectsPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
+                    fontSize: isDesktop ? 18 : 14,
                   ),
                 ),
               ),
@@ -243,12 +267,11 @@ class _SubjectsPageState extends State<SubjectsPage> {
     );
   }
 
-  // Create a custom page transition
   Route _createRoute(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0); // Start from the right
+        const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.ease;
 
