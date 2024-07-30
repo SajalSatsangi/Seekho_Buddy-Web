@@ -212,209 +212,212 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            double padding = constraints.maxWidth * 0.08;
-            double iconSize = constraints.maxWidth * 0.1;
-            double fontSizeTitle = constraints.maxWidth * 0.06;
-            double fontSizeSubtitle = constraints.maxWidth * 0.04;
-            double inputFieldHeight = constraints.maxHeight * 0.04;
-            double buttonHeight = constraints.maxHeight * 0.06;
+            // Determine if it's a desktop layout
+            bool isDesktop = constraints.maxWidth > 600;
+
+            double padding = isDesktop ? 40 : constraints.maxWidth * 0.08;
+            double iconSize = isDesktop ? 40 : constraints.maxWidth * 0.1;
+            double fontSizeTitle = isDesktop ? 32 : constraints.maxWidth * 0.06;
+            double fontSizeSubtitle = isDesktop ? 18 : constraints.maxWidth * 0.04;
+            double inputFieldHeight = isDesktop ? 50 : constraints.maxHeight * 0.04;
+            double buttonHeight = isDesktop ? 60 : constraints.maxHeight * 0.06;
 
             return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(padding),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/loginPage.png',
-                      height: constraints.maxHeight * 0.3,
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.02),
-                    Text(
-                      'Seekho Buddy',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: fontSizeTitle,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.01),
-                    Text(
-                      'Access study materials efficiently',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: fontSizeSubtitle,
-                      ),
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.03),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: padding),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.menu_book_sharp,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 600),
+                  child: Padding(
+                    padding: EdgeInsets.all(padding),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/loginPage.png',
+                          height: isDesktop ? 250 : constraints.maxHeight * 0.3,
+                        ),
+                        SizedBox(height: isDesktop ? 20 : constraints.maxHeight * 0.02),
+                        Text(
+                          'Seekho Buddy',
+                          style: TextStyle(
                             color: Colors.white,
-                            size: iconSize,
+                            fontSize: fontSizeTitle,
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(width: padding / 2),
-                          Expanded(
-                            child: TextField(
-                              controller: _rollNumberController,
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Roll Number',
-                                hintStyle: TextStyle(color: Colors.white70),
-                                filled: true,
-                                fillColor: Colors.grey.shade800,
-                                contentPadding: EdgeInsets.symmetric(
-                                        vertical: inputFieldHeight / 2)
-                                    .copyWith(
-                                  left: 20,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.03),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: padding),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: Colors.white,
-                            size: iconSize,
-                          ),
-                          SizedBox(width: padding / 2),
-                          Expanded(
-                            child: TextField(
-                              controller: _passwordController,
-                              obscureText: true,
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Password',
-                                hintStyle: TextStyle(color: Colors.white70),
-                                filled: true,
-                                fillColor: Colors.grey.shade800,
-                                contentPadding: EdgeInsets.symmetric(
-                                        vertical: inputFieldHeight / 2)
-                                    .copyWith(
-                                  left: 20,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.01),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: padding * 1.5),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                    onPressed: _resetPassword,
-                        child: Text(
-                          'Forgot your password',
+                        ),
+                        SizedBox(height: isDesktop ? 10 : constraints.maxHeight * 0.01),
+                        Text(
+                          'Access study materials efficiently',
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: fontSizeSubtitle,
                           ),
-                            ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.04),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: padding),
-                      child: ElevatedButton(
-                        onPressed: _signInWithRollNumber,
-                        child: Text('Sign In'),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.grey.shade800,
-                          minimumSize: Size(double.infinity, buttonHeight),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
+                        SizedBox(height: isDesktop ? 30 : constraints.maxHeight * 0.03),
+                        _buildInputField(
+                          icon: Icons.menu_book_sharp,
+                          hintText: 'Roll Number',
+                          controller: _rollNumberController,
+                          iconSize: iconSize,
+                          padding: padding,
+                          inputFieldHeight: inputFieldHeight,
                         ),
-                      ),
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.04),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: Colors.grey.shade800,
-                            thickness: 1,
-                            indent: padding,
-                            endIndent: padding / 3,
-                          ),
+                        SizedBox(height: isDesktop ? 20 : constraints.maxHeight * 0.03),
+                        _buildInputField(
+                          icon: Icons.search,
+                          hintText: 'Password',
+                          controller: _passwordController,
+                          iconSize: iconSize,
+                          padding: padding,
+                          inputFieldHeight: inputFieldHeight,
+                          isPassword: true,
                         ),
-                        Text(
-                          'OR JOIN',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: fontSizeSubtitle,
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            color: Colors.grey.shade800,
-                            thickness: 1,
-                            indent: padding / 3,
-                            endIndent: padding,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.025),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Create an account',
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 157, 157, 157),
-                            fontSize: fontSizeSubtitle,
-                          ),
-                        ),
-                        SizedBox(width: padding / 3),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUpPage()),
-                            );
-                          },
-                          child: Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: fontSizeSubtitle,
+                        SizedBox(height: isDesktop ? 10 : constraints.maxHeight * 0.01),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: padding * 1.5),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: _resetPassword,
+                              child: Text(
+                                'Forgot your password',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: fontSizeSubtitle,
+                                ),
+                              ),
                             ),
                           ),
                         ),
+                        SizedBox(height: isDesktop ? 30 : constraints.maxHeight * 0.04),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          child: ElevatedButton(
+                            onPressed: _signInWithRollNumber,
+                            child: Text('Sign In'),
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.grey.shade800,
+                              minimumSize: Size(double.infinity, buttonHeight),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: isDesktop ? 30 : constraints.maxHeight * 0.04),
+                        _buildDivider(padding, fontSizeSubtitle),
+                        SizedBox(height: isDesktop ? 20 : constraints.maxHeight * 0.025),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Create an account',
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 157, 157, 157),
+                                fontSize: fontSizeSubtitle,
+                              ),
+                            ),
+                            SizedBox(width: padding / 3),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SignUpPage()),
+                                );
+                              },
+                              child: Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: fontSizeSubtitle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             );
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildInputField({
+    required IconData icon,
+    required String hintText,
+    required TextEditingController controller,
+    required double iconSize,
+    required double padding,
+    required double inputFieldHeight,
+    bool isPassword = false,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: padding),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+            size: iconSize,
+          ),
+          SizedBox(width: padding / 2),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              obscureText: isPassword,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: hintText,
+                hintStyle: TextStyle(color: Colors.white70),
+                filled: true,
+                fillColor: Colors.grey.shade800,
+                contentPadding: EdgeInsets.symmetric(vertical: inputFieldHeight / 2).copyWith(
+                  left: 20,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider(double padding, double fontSizeSubtitle) {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(
+            color: Colors.grey.shade800,
+            thickness: 1,
+            indent: padding,
+            endIndent: padding / 3,
+          ),
+        ),
+        Text(
+          'OR JOIN',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: fontSizeSubtitle,
+          ),
+        ),
+        Expanded(
+          child: Divider(
+            color: Colors.grey.shade800,
+            thickness: 1,
+            indent: padding / 3,
+            endIndent: padding,
+          ),
+        ),
+      ],
     );
   }
 }
