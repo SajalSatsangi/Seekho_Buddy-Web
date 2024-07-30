@@ -127,7 +127,7 @@ class _DonationPageState extends State<DonationPage> {
                             ),
                             SizedBox(height: isDesktop ? 32 : 24),
                             Text(
-                              'Donate Methods',
+                              'Donations',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: isDesktop ? 24 : 20,
