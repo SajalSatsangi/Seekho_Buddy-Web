@@ -4,6 +4,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 Future<void> showAddPopup(BuildContext context) async {
   final TextEditingController titleController = TextEditingController();
@@ -213,13 +214,27 @@ Future<void> showAddPopup(BuildContext context) async {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  String fileUrl = 'https://img.freepik.com/premium-vector/notice-free-vector_734448-5.jpg';
+                  String fileUrl =
+                      'https://img.freepik.com/premium-vector/notice-free-vector_734448-5.jpg';
                   if (selectedFile != null) {
-                    TaskSnapshot snapshot = await FirebaseStorage.instance
-                        .ref('notices/${selectedFile!.name}')
-                        .putFile(File(selectedFile!.path!));
+                    try {
+                      Reference ref = FirebaseStorage.instance
+                          .ref('notices/${selectedFile!.name}');
+                      UploadTask uploadTask;
 
-                    fileUrl = await snapshot.ref.getDownloadURL();
+                      if (kIsWeb) {
+                        // For web platform
+                        uploadTask = ref.putData(selectedFile!.bytes!);
+                      } else {
+                        // For native platforms
+                        uploadTask = ref.putFile(File(selectedFile!.path!));
+                      }
+
+                      TaskSnapshot snapshot = await uploadTask;
+                      fileUrl = await snapshot.ref.getDownloadURL();
+                    } catch (e) {
+                      print('Error uploading file: $e');
+                    }
                   }
 
                   final data = <String, dynamic>{
