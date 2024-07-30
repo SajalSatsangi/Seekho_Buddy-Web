@@ -43,31 +43,34 @@ class _DonationPageState extends State<DonationPage> {
 
   Future<void> submitDonation() async {
     if (user != null) {
-      await FirebaseFirestore.instance.collection('donations').doc(otherInfoController.text).set({
+      await FirebaseFirestore.instance
+          .collection('donations')
+          .doc(otherInfoController.text)
+          .set({
         'user_id': user!.uid,
         'description': descriptionController.text,
         'drive_link': driveLinkController.text,
         'about_material': otherInfoController.text,
         'user_data': userData!.data(),
       }).then((value) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Submission Successful'),
-            content: Text('Your donation has been submitted successfully.'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    });
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Submission Successful'),
+              content: Text('Your donation has been submitted successfully.'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      });
     }
   }
 
@@ -79,7 +82,7 @@ class _DonationPageState extends State<DonationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Donate',
+          'Donation',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
