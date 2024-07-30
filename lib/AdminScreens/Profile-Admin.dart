@@ -7,7 +7,6 @@ import '../Profile/editprofile.dart';
 import 'UsersData.dart';
 
 class ProfileScreenAdmin extends StatelessWidget {
-  ProfileScreenAdmin({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,8 +52,6 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           userData = querySnapshot.docs.first;
         });
-
-        print(userData!.data());
       }
     }
   }
@@ -63,218 +60,142 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        bool isDesktop = constraints.maxWidth > 600;
-
-        double padding = isDesktop ? 40 : constraints.maxWidth * 0.08;
-        double iconSize = isDesktop ? 30 : constraints.maxWidth * 0.07;
-        double fontSizeTitle = isDesktop ? 32 : constraints.maxWidth * 0.06;
-        double fontSizeSubtitle = isDesktop ? 18 : constraints.maxWidth * 0.04;
-        double spacingHeight = isDesktop ? 20 : constraints.maxHeight * 0.02;
-        double inputFontSize = isDesktop ? 16 : constraints.maxWidth * 0.035;
+        final isDesktop = constraints.maxWidth > 600;
+        final screenWidth = constraints.maxWidth;
+        final screenHeight = constraints.maxHeight;
 
         return Scaffold(
-          appBar: AppBar(
-            title: Padding(
-              padding: EdgeInsets.only(
-                  left: padding,
-                  right: padding,
-                  top: spacingHeight,
-                  bottom: spacingHeight),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "Profile",
-                    style: TextStyle(
-                      fontSize: fontSizeTitle,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: iconSize,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfile()),
-                          );
-                        },
-                      ),
-                      Visibility(
-                        visible: userData != null &&
-                            (userData!['role'] == 'admin' ||
-                                userData!['role'] == 'verificationist'),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.request_page,
-                            color: Colors.white,
-                            size: iconSize,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => VerificationApp()),
-                            );
-                          },
-                        ),
-                      ),
-                      Visibility(
-                        visible: userData != null &&
-                            (userData!['role'] == 'admin' ||
-                                userData!['role'] == 'dataeditor'),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: iconSize,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => userdata()),
-                            );
-                          },
-                        ),
-                      ),
-                      Visibility(
-                        visible: userData != null &&
-                            (userData!['role'] == 'admin' ||
-                                userData!['role'] == 'dataeditor'),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.book,
-                            color: Colors.white,
-                            size: iconSize,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MaterialConfirmationScreen()),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+          appBar: _buildAppBar(isDesktop, screenWidth, screenHeight),
           body: userData == null
               ? Center(child: CircularProgressIndicator())
-              : Center(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.all(padding),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: spacingHeight),
-                          Center(
-                            child: Column(
-                              children: [
-                                CircleAvatar(
-                                  radius: iconSize * 2,
-                                  backgroundImage: NetworkImage(
-                                      userData!['profile_picture']),
-                                ),
-                                SizedBox(height: spacingHeight),
-                                Text(
-                                  userData!['name'],
-                                  style: TextStyle(
-                                    fontSize: fontSizeTitle,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: spacingHeight * 0.25),
-                                Text(
-                                  userData!['email'],
-                                  style: TextStyle(
-                                    fontSize: fontSizeSubtitle,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                SizedBox(height: spacingHeight),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    buildInfoBox(
-                                      label: 'University',
-                                      text: 'Dayalbagh Educational Institute',
-                                      icon: Icons.location_city,
-                                      screenWidth: constraints.maxWidth,
-                                      iconSize: iconSize,
-                                      fontSize: inputFontSize,
-                                    ),
-                                    SizedBox(height: spacingHeight * 0.5),
-                                    buildInfoBox(
-                                      label: 'Roll Number',
-                                      text: userData!['rollno'],
-                                      icon: Icons.confirmation_number,
-                                      screenWidth: constraints.maxWidth,
-                                      iconSize: iconSize,
-                                      fontSize: inputFontSize,
-                                    ),
-                                    SizedBox(height: spacingHeight * 0.5),
-                                    buildInfoBox(
-                                      label: 'Faculty',
-                                      text: userData!['faculty'],
-                                      icon: Icons.account_balance,
-                                      screenWidth: constraints.maxWidth,
-                                      iconSize: iconSize,
-                                      fontSize: inputFontSize,
-                                    ),
-                                    SizedBox(height: spacingHeight * 0.5),
-                                    buildInfoBox(
-                                      label: 'Branch',
-                                      text: userData!['subfaculty'],
-                                      icon: Icons.category,
-                                      screenWidth: constraints.maxWidth,
-                                      iconSize: iconSize,
-                                      fontSize: inputFontSize,
-                                    ),
-                                    SizedBox(height: spacingHeight * 0.5),
-                                    buildInfoBox(
-                                      label: 'Specialization',
-                                      text: userData!['subbranch'],
-                                      icon: Icons.spa,
-                                      screenWidth: constraints.maxWidth,
-                                      iconSize: iconSize,
-                                      fontSize: inputFontSize,
-                                    ),
-                                    SizedBox(height: spacingHeight * 0.5),
-                                    buildInfoBox(
-                                      label: 'Semester',
-                                      text: userData!['semester'],
-                                      icon: Icons.timeline,
-                                      screenWidth: constraints.maxWidth,
-                                      iconSize: iconSize,
-                                      fontSize: inputFontSize,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: spacingHeight),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              : _buildProfileContent(isDesktop, screenWidth, screenHeight),
         );
       },
+    );
+  }
+
+  AppBar _buildAppBar(bool isDesktop, double screenWidth, double screenHeight) {
+    double padding = isDesktop ? 40 : screenWidth * 0.05;
+    double iconSize = isDesktop ? 30 : screenWidth * 0.06;
+    double fontSizeTitle = isDesktop ? 32 : screenWidth * 0.06;
+
+    return AppBar(
+      title: Padding(
+        padding: EdgeInsets.symmetric(horizontal: padding, vertical: screenHeight * 0.02),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              "Profile",
+              style: TextStyle(
+                fontSize: fontSizeTitle,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                _buildIconButton(Icons.edit, () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+                }, iconSize),
+                if (userData != null && (userData!['role'] == 'admin' || userData!['role'] == 'verificationist'))
+                  _buildIconButton(Icons.request_page, () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationApp()));
+                  }, iconSize),
+                if (userData != null && (userData!['role'] == 'admin' || userData!['role'] == 'dataeditor'))
+                  _buildIconButton(Icons.person, () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => userdata()));
+                  }, iconSize),
+                if (userData != null && (userData!['role'] == 'admin' || userData!['role'] == 'dataeditor'))
+                  _buildIconButton(Icons.book, () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MaterialConfirmationScreen()));
+                  }, iconSize),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIconButton(IconData icon, VoidCallback onPressed, double size) {
+    return IconButton(
+      icon: Icon(icon, color: Colors.white, size: size),
+      onPressed: onPressed,
+    );
+  }
+
+  Widget _buildProfileContent(bool isDesktop, double screenWidth, double screenHeight) {
+    double padding = isDesktop ? 40 : screenWidth * 0.05;
+    double iconSize = isDesktop ? 60 : screenWidth * 0.15;
+    double fontSizeTitle = isDesktop ? 32 : screenWidth * 0.06;
+    double fontSizeSubtitle = isDesktop ? 18 : screenWidth * 0.04;
+    double spacingHeight = isDesktop ? 20 : screenHeight * 0.02;
+    double inputFontSize = isDesktop ? 16 : screenWidth * 0.035;
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 800),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(padding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: iconSize,
+                  backgroundImage: NetworkImage(userData!['profile_picture']),
+                ),
+                SizedBox(height: spacingHeight),
+                Text(
+                  userData!['name'],
+                  style: TextStyle(
+                    fontSize: fontSizeTitle,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: spacingHeight * 0.25),
+                Text(
+                  userData!['email'],
+                  style: TextStyle(
+                    fontSize: fontSizeSubtitle,
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(height: spacingHeight),
+                _buildInfoBoxes(isDesktop, screenWidth, iconSize, inputFontSize),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoBoxes(bool isDesktop, double screenWidth, double iconSize, double fontSize) {
+    List<Map<String, dynamic>> infoItems = [
+      {'label': 'University', 'text': 'Dayalbagh Educational Institute', 'icon': Icons.location_city},
+      {'label': 'Roll Number', 'text': userData!['rollno'], 'icon': Icons.confirmation_number},
+      {'label': 'Faculty', 'text': userData!['faculty'], 'icon': Icons.account_balance},
+      {'label': 'Branch', 'text': userData!['subfaculty'], 'icon': Icons.category},
+      {'label': 'Specialization', 'text': userData!['subbranch'], 'icon': Icons.spa},
+      {'label': 'Semester', 'text': userData!['semester'], 'icon': Icons.timeline},
+    ];
+
+    return Column(
+      children: infoItems.map((item) => Column(
+        children: [
+          buildInfoBox(
+            label: item['label'],
+            text: item['text'],
+            icon: item['icon'],
+            screenWidth: screenWidth,
+            iconSize: iconSize * 0.5,
+            fontSize: fontSize,
+          ),
+          SizedBox(height: isDesktop ? 20 : screenWidth * 0.03),
+        ],
+      )).toList(),
     );
   }
 
@@ -286,34 +207,35 @@ class _ProfilePageState extends State<ProfilePage> {
     required double iconSize,
     required double fontSize,
   }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: screenWidth * 0.005),
-      child: Container(
-        width: screenWidth * 0.75,
-        padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.04, vertical: screenWidth * 0.03),
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(32, 32, 32, 1),
-          borderRadius: BorderRadius.circular(screenWidth * 0.05),
-          border: Border.all(color: const Color.fromARGB(255, 115, 115, 115)),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: Color.fromARGB(255, 255, 255, 255),
-              size: iconSize,
-            ),
-            SizedBox(width: screenWidth * 0.04),
-            Text(
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.04,
+        vertical: screenWidth * 0.03,
+      ),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(32, 32, 32, 1),
+        borderRadius: BorderRadius.circular(screenWidth * 0.02),
+        border: Border.all(color: const Color.fromARGB(255, 115, 115, 115)),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Color.fromARGB(255, 255, 255, 255),
+            size: iconSize,
+          ),
+          SizedBox(width: screenWidth * 0.04),
+          Expanded(
+            child: Text(
               text,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: fontSize,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
