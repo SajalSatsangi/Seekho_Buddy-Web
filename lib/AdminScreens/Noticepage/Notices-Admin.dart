@@ -165,7 +165,7 @@ class _MyWidgetState extends State<MyWidget> {
         builder: (context, constraints) {
           final isDesktop = constraints.maxWidth > 600;
           final contentWidth = isDesktop ? 600.0 : constraints.maxWidth;
-          
+
           return Center(
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 800),
@@ -187,7 +187,8 @@ class _MyWidgetState extends State<MyWidget> {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => Home()),
+                                    MaterialPageRoute(
+                                        builder: (context) => Home()),
                                   );
                                 },
                               ),
@@ -238,7 +239,8 @@ class _MyWidgetState extends State<MyWidget> {
                             return Text('Something went wrong');
                           }
 
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return Text("Loading");
                           }
 
@@ -247,8 +249,10 @@ class _MyWidgetState extends State<MyWidget> {
                           }
 
                           return ListView(
-                            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                            children: snapshot.data!.docs
+                                .map((DocumentSnapshot document) {
+                              Map<String, dynamic> data =
+                                  document.data() as Map<String, dynamic>;
                               if (shouldRenderNotice(data)) {
                                 return GestureDetector(
                                   onTap: () {
@@ -256,8 +260,11 @@ class _MyWidgetState extends State<MyWidget> {
                                       clickedNotices.add(document.id);
                                       saveClickedNotices();
                                     });
-                                    showMaintenanceNotice(context, data['title'],
-                                        data['description'], data['fileUrl']);
+                                    showMaintenanceNotice(
+                                        context,
+                                        data['title'],
+                                        data['description'],
+                                        data['fileUrl']);
                                   },
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
@@ -268,35 +275,46 @@ class _MyWidgetState extends State<MyWidget> {
                                         Container(
                                           width: contentWidth,
                                           decoration: BoxDecoration(
-                                            color: Color(0xFF323232).withOpacity(
-                                                clickedNotices.contains(document.id)
+                                            color: Color(0xFF323232)
+                                                .withOpacity(clickedNotices
+                                                        .contains(document.id)
                                                     ? 0.6
                                                     : 1.0),
-                                            borderRadius: BorderRadius.circular(20),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
                                           ),
                                           padding: EdgeInsets.all(16),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 data['title'],
                                                 style: TextStyle(
                                                   fontSize: isDesktop ? 20 : 18,
                                                   fontWeight: FontWeight.bold,
-                                                  color: Colors.white.withOpacity(
-                                                      clickedNotices.contains(document.id)
-                                                          ? 0.6
-                                                          : 1.0),
+                                                  color: Colors.white
+                                                      .withOpacity(
+                                                          clickedNotices
+                                                                  .contains(
+                                                                      document
+                                                                          .id)
+                                                              ? 0.6
+                                                              : 1.0),
                                                 ),
                                               ),
                                               SizedBox(height: 8),
                                               Text(
                                                 data['description'],
                                                 style: TextStyle(
-                                                  color: Colors.white.withOpacity(
-                                                      clickedNotices.contains(document.id)
-                                                          ? 0.6
-                                                          : 1.0),
+                                                  color: Colors.white
+                                                      .withOpacity(
+                                                          clickedNotices
+                                                                  .contains(
+                                                                      document
+                                                                          .id)
+                                                              ? 0.6
+                                                              : 1.0),
                                                   fontSize: isDesktop ? 16 : 14,
                                                 ),
                                               ),
@@ -304,17 +322,22 @@ class _MyWidgetState extends State<MyWidget> {
                                               Text(
                                                 "Posted on: ${data['date']}",
                                                 style: TextStyle(
-                                                  color: Colors.grey.withOpacity(
-                                                      clickedNotices.contains(document.id)
-                                                          ? 0.6
-                                                          : 1.0),
+                                                  color: Colors.grey
+                                                      .withOpacity(
+                                                          clickedNotices
+                                                                  .contains(
+                                                                      document
+                                                                          .id)
+                                                              ? 0.6
+                                                              : 1.0),
                                                   fontSize: isDesktop ? 14 : 12,
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        if (!clickedNotices.contains(document.id))
+                                        if (!clickedNotices
+                                            .contains(document.id))
                                           Positioned(
                                             bottom: 16,
                                             right: 16,
@@ -322,7 +345,8 @@ class _MyWidgetState extends State<MyWidget> {
                                               width: isDesktop ? 16 : 12,
                                               height: isDesktop ? 16 : 12,
                                               decoration: BoxDecoration(
-                                                color: Color.fromARGB(255, 230, 61, 27),
+                                                color: Color.fromARGB(
+                                                    255, 230, 61, 27),
                                                 shape: BoxShape.circle,
                                               ),
                                             ),

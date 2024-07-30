@@ -1,13 +1,12 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'edit.dart'; // Import the EditField screen
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:path_provider/path_provider.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -40,56 +39,58 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> updateProfilePicture() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      File file = File(pickedFile.path);
+  if (pickedFile != null) {
+    try {
+      // Retrieve the user's name
+      String userName = userData!.data()!['name'];
+      // Construct the file path using the user's name
+      String filePath = 'profile_pictures/${userName}.png';
+      Reference ref = FirebaseStorage.instance.ref(filePath);
+      UploadTask uploadTask;
 
-      // Compress the image
-      final Uint8List? compressedData =
-          await FlutterImageCompress.compressWithFile(
-        file.absolute.path,
-        minWidth: 1024,
-        minHeight: 768,
-        quality: 88,
-      );
-
-      // Create a new file with the compressed data
-      final String dir = (await getTemporaryDirectory()).path;
-      final String targetPath = '$dir/temp.jpg';
-      file = await File(targetPath).writeAsBytes(compressedData as List<int>);
-
-      try {
-        // Retrieve the user's name
-        String userName = userData!.data()!['name'];
-        // Construct the file path using the user's name
-        String filePath = 'profile_pictures/${userName}.png';
-        UploadTask uploadTask =
-            FirebaseStorage.instance.ref(filePath).putFile(file);
-
-        TaskSnapshot taskSnapshot = await uploadTask;
-        String downloadURL = await taskSnapshot.ref.getDownloadURL();
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userData!.id)
-            .update({'profile_picture': downloadURL});
-
-        // Fetch updated user data from Firestore
-        await fetchUserData();
-      } catch (e) {
-        print(e);
-        // Show an error message to the user
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text('Failed to upload profile picture. Please try again.'),
-          ),
+      if (kIsWeb) {
+        // For web platform
+        final bytes = await pickedFile.readAsBytes();
+        uploadTask = ref.putData(bytes);
+      } else {
+        // For native platforms
+        Uint8List imageData = await pickedFile.readAsBytes();
+        
+        // Compress the image (only for native platforms)
+        Uint8List? compressedData = await FlutterImageCompress.compressWithList(
+          imageData,
+          minWidth: 1024,
+          minHeight: 768,
+          quality: 88,
         );
+
+        uploadTask = ref.putData(compressedData);
       }
+
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userData!.id)
+          .update({'profile_picture': downloadURL});
+
+      // Fetch updated user data from Firestore
+      await fetchUserData();
+    } catch (e) {
+      print(e);
+      // Show an error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to upload profile picture. Please try again.'),
+        ),
+      );
     }
   }
+}
 
   Future<void> navigateToEditField(String field, String currentValue) async {
     final result = await Navigator.push(
