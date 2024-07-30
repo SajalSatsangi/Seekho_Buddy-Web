@@ -116,190 +116,80 @@ class _EditProfileState extends State<EditProfile> {
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: userData == null
-          ? Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-              children: [
-                GestureDetector(
-                  onTap: () => updateProfilePicture(),
-                  child: CircleAvatar(
-                    radius: MediaQuery.of(context).size.width * 0.15,
-                    backgroundImage:
-                        NetworkImage(userData!.data()!['profile_picture']),
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.width * 0.04),
-                GestureDetector(
-                  onTap: () =>
-                      navigateToEditField('name', userData!.data()!['name']),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.width * 0.012),
-                    padding: EdgeInsets.all(
-                        MediaQuery.of(context).size.width * 0.03),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF292929),
-                      borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.width * 0.03),
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        userData!.data()!['name'],
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.05,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          final contentWidth = isDesktop ? 600.0 : constraints.maxWidth;
+
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: contentWidth),
+              child: userData == null
+                  ? CircularProgressIndicator()
+                  : ListView(
+                      padding: EdgeInsets.all(16),
+                      children: [
+                        GestureDetector(
+                          onTap: updateProfilePicture,
+                          child: CircleAvatar(
+                            radius: isDesktop ? 80 : constraints.maxWidth * 0.15,
+                            backgroundImage: NetworkImage(userData!.data()!['profile_picture']),
+                          ),
                         ),
-                      ),
+                        SizedBox(height: 16),
+                        _buildInfoContainer('name', userData!.data()!['name'], isDesktop, isHeader: true),
+                        _buildInfoContainer('email', userData!.data()!['email'], isDesktop),
+                        SizedBox(height: 24),
+                        Center(
+                          child: Text(
+                            'Academic Information',
+                            style: TextStyle(
+                              fontSize: isDesktop ? 22 : 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        _buildInfoContainer('rollno', 'Roll Number: ${userData!.data()!['rollno']}', isDesktop),
+                        _buildInfoContainer('faculty', 'Faculty: ${userData!.data()!['faculty']}', isDesktop),
+                        _buildInfoContainer('subfaculty', 'Branch: ${userData!.data()!['subfaculty']}', isDesktop),
+                        _buildInfoContainer('subbranch', 'Sub-Branch: ${userData!.data()!['subbranch']}', isDesktop),
+                        _buildInfoContainer('semester', 'Semester: ${userData!.data()!['semester']}', isDesktop),
+                      ],
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.width * 0.012),
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF292929),
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.03),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      userData!.data()!['email'],
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03,
-                        color: Color.fromARGB(255, 185, 185, 185),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.width * 0.06),
-                Center(
-                  child: Text(
-                    'Academic Information',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.045,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.width * 0.016),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.width * 0.012),
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF292929),
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.03),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Roll Number: ${userData!.data()!['rollno']}',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03,
-                        color: Color.fromARGB(255, 185, 185, 185),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.width * 0.012),
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF292929),
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.03),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Faculty: ${userData!.data()!['faculty']}',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03,
-                        color: Color.fromARGB(255, 185, 185, 185),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.width * 0.012),
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF292929),
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.03),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Branch: ${userData!.data()!['subfaculty']}',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03,
-                        color: Color.fromARGB(255, 185, 185, 185),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.width * 0.012),
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF292929),
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.03),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Sub-Branch: ${userData!.data()!['subbranch']}',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03,
-                        color: Color.fromARGB(255, 185, 185, 185),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.width * 0.012),
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF292929),
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.03),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Semester: ${userData!.data()!['semester']}',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.03,
-                        color: Color.fromARGB(255, 185, 185, 185),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
             ),
+          );
+        },
+      ),
+    );
+  }
+  Widget _buildInfoContainer(String field, String value, bool isDesktop, {bool isHeader = false}) {
+    return GestureDetector(
+      onTap: isHeader ? () => navigateToEditField(field, value) : null,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 6),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Color(0xFF292929),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: isDesktop
+                  ? (isHeader ? 24 : 16)
+                  : (isHeader ? 20 : 14),
+              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+              color: isHeader ? Colors.white : Color.fromARGB(255, 185, 185, 185),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
