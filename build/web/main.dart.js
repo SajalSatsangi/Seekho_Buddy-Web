@@ -106552,7 +106552,7 @@ return new A.au(new A.W(s,8,s,8),A.bp(k,new A.au(new A.W(12,12,12,12),A.aU(A.a([
 $S:23}
 A.aom.prototype={
 $0(){var s=null,r=this.b,q=J.Y(r)
-if(q.h(r,"pdfUrl")!=null)this.a.vN(q.h(r,"pdfUrl"))
+if(q.h(r,"link")!=null)this.a.vN(q.h(r,"link"))
 else{r=this.c.aj(t.Pu)
 r.toString
 r.f.oM(A.vw(s,s,s,s,s,B.t,s,A.O("PDF URL not available",s,s,s,s,s,s),s,B.dP,s,s,s,s,s,s,s,s,s))}},
