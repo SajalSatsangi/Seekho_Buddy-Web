@@ -21,196 +21,140 @@ class Courses extends StatelessWidget {
 class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final screenWidth = mediaQuery.size.width;
-    final screenHeight = mediaQuery.size.height;
-    final padding = mediaQuery.padding;
-
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(
-            top: padding.top + 2.0), // Additional padding from the top
-        child: Column(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 1200),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top + 20.0,
+                  left: 20,
+                  right: 20,
+                ),
+                child: Column(
+                  children: [
+                    _buildHeader(context, isDesktop),
+                    SizedBox(height: 40),
+                    _buildCourseBox(
+                      context,
+                      isDesktop,
+                      'Your Courses',
+                      'assets/YC.svg',
+                      SubjectsPage(),
+                    ),
+                    SizedBox(height: 20),
+                    _buildCourseBox(
+                      context,
+                      isDesktop,
+                      'Other Courses',
+                      'assets/OC.svg',
+                      Faculties(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      backgroundColor: Colors.black87,
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, bool isDesktop) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Row(
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                left: screenWidth * 0.04,
-                right: screenWidth * 0.04,
-                top: screenHeight * 0.02,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
-                          );
-                        },
-                      ),
-                      SizedBox(width: screenWidth * 0.02),
-                      Text(
-                        "Courses",
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.07,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
             ),
-            SizedBox(
-                height: screenHeight *
-                    0.05), // Space between the search bar and the first box
-            Container(
-              width: screenWidth * 0.85,
-              height: screenHeight * 0.2,
-              decoration: BoxDecoration(
-                color: Color(0xFF323232),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              padding: EdgeInsets.all(screenWidth * 0.03),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/YC.svg',
-                    width: screenWidth * 0.25,
-                    height: screenHeight * 0.12,
-                  ),
-                  SizedBox(width: screenWidth * 0.05),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Your Courses',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenWidth * 0.06,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.01),
-                        Row(
-                          children: [
-                            SizedBox(
-                                width: screenWidth *
-                                    0.1), // Add space before the button
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SubjectsPage()),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                disabledBackgroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              child: Text(
-                                'View',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize:
-                                        screenWidth * 0.045), // Text color
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.02),
-            SizedBox(
-                height: screenHeight *
-                    0.01), // Space between the first box and the second box
-            Container(
-              width: screenWidth * 0.85,
-              height: screenHeight * 0.2,
-              decoration: BoxDecoration(
-                color: Color(0xFF323232),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              padding: EdgeInsets.all(screenWidth * 0.03),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/OC.svg',
-                    width: screenWidth * 0.25,
-                    height: screenHeight * 0.12,
-                  ),
-                  SizedBox(width: screenWidth * 0.05),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Other Courses',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenWidth * 0.06,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.01),
-                        Row(
-                          children: [
-                            SizedBox(
-                                width: screenWidth *
-                                    0.1), // Add space before the button
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Faculties()),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                disabledBackgroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              child: Text(
-                                'View',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize:
-                                        screenWidth * 0.045), // Text color
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+            SizedBox(width: 10),
+            Text(
+              "Courses",
+              style: TextStyle(
+                fontSize: isDesktop ? 32 : 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
           ],
         ),
+      ],
+    );
+  }
+  Widget _buildCourseBox(BuildContext context, bool isDesktop, String title,
+      String assetPath, Widget destination) {
+    return Container(
+      width: double.infinity,
+      height: isDesktop ? 200 : 160,
+      decoration: BoxDecoration(
+        color: Color(0xFF323232),
+        borderRadius: BorderRadius.circular(30),
       ),
-      backgroundColor: Colors.black87,
+      padding: EdgeInsets.all(20),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            assetPath,
+            width: isDesktop ? 150 : 100,
+            height: isDesktop ? 150 : 100,
+          ),
+          SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: isDesktop ? 28 : 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => destination),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isDesktop ? 30 : 20,
+                      vertical: isDesktop ? 15 : 10,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    'View',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: isDesktop ? 18 : 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
