@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seekhobuddy/Other%20Cources/7PdfViewer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Materialpage extends StatelessWidget {
   final Map material;
@@ -17,6 +18,14 @@ class Materialpage extends StatelessWidget {
     required this.semesterName,
     required this.subjectName,
   });
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceSafariVC: false, forceWebView: false);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +93,8 @@ class Materialpage extends StatelessWidget {
                           Row(
                             children: [
                               IconButton(
-                                icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                                icon: Icon(Icons.arrow_back_ios,
+                                    color: Colors.white),
                                 onPressed: () => Navigator.of(context).pop(),
                               ),
                               SizedBox(width: 10),
@@ -110,7 +120,8 @@ class Materialpage extends StatelessWidget {
                         Map AA = AAs[AAKey];
 
                         return Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: isDesktop ? 24 : 16),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8, horizontal: isDesktop ? 24 : 16),
                           child: Container(
                             height: isDesktop ? 80 : 70,
                             decoration: BoxDecoration(
@@ -120,7 +131,8 @@ class Materialpage extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.all(12),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
@@ -138,15 +150,21 @@ class Materialpage extends StatelessWidget {
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => PdfViewer(AA: AA),
-                                        ),
-                                      );
+                                      if (AA['link'] != null) {
+                                        _launchURL(AA['link']);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'PDF URL not available')),
+                                        );
+                                      }
                                     },
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
                                     ),
                                     child: Text(
                                       'View',
