@@ -54,8 +54,7 @@ class _SubjectsState extends State<Subjects> {
     }
 
     void _showAddMaterialDialog() {
-      final TextEditingController _subjectNameController =
-          TextEditingController();
+      final TextEditingController _subjectNameController = TextEditingController();
       final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
       showDialog(
@@ -71,18 +70,13 @@ class _SubjectsState extends State<Subjects> {
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
+                onPressed: () => Navigator.of(context).pop(),
                 child: Text('Cancel'),
               ),
               TextButton(
                 onPressed: () async {
-                  // Handle the action when "Add" is pressed
-                  String subjecttName = _subjectNameController.text;
-                  if (subjecttName.isNotEmpty) {
-
-                    // Update the Firebase Firestore
+                  String subjectName = _subjectNameController.text;
+                  if (subjectName.isNotEmpty) {
                     await _firestore
                         .collection('seekhobuddydb')
                         .doc(widget.facultyName)
@@ -90,15 +84,15 @@ class _SubjectsState extends State<Subjects> {
                       'branches': {
                         widget.branchName: {
                            widget.semesterName: {
-                            subjecttName: {
-                              'subjectName': subjecttName,
-                        }                         
-                        }
+                            subjectName: {
+                              'subjectName': subjectName,
+                            }                         
+                          }
                         }
                       }
                     }, SetOptions(merge: true));
                   }
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                 },
                 child: Text('Add'),
               ),
@@ -110,177 +104,161 @@ class _SubjectsState extends State<Subjects> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Navigate back
-                        },
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(
-                        widget.semesterName,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white, // Text color
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 14, left: 14, right: 14),
-            child: TextField(
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value;
-                });
-              },
-              style: TextStyle(color: Colors.white), // Add this line
-              decoration: InputDecoration(
-                hintText: "Search...",
-                hintStyle: TextStyle(color: Colors.white),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                  size: 20,
-                ),
-                filled: true,
-                fillColor: Color(0xFF323232),
-                contentPadding: EdgeInsets.all(8),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Color(0xFF323232)),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredSubjects.length,
-              itemBuilder: (context, index) {
-                String subjectKey = filteredSubjects.keys.elementAt(index);
-                Map subject = filteredSubjects[subjectKey];
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          final contentWidth = isDesktop ? 600.0 : constraints.maxWidth;
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 7.0, horizontal: 27.0),
-                  child: GestureDetector(
-                    child: Container(
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(50, 50, 50, 1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.subject,
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: contentWidth),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SafeArea(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                widget.semesterName,
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 32 : 24,
+                                  fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
-                                SizedBox(width: 8),
-                                Text(
-                                  subject['subjectName'] ??
-                                      'Default Subject Name',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                getUserRole().then((role) {
-                                  if (role == 'student' ||
-                                      role == 'verificationist') {
-                                    Navigator.push(
-                                      context,
-                                      SlideLeftPageRoute(
-                                        page: Materialsectionpage(
-                                          subjectName: subject['subjectName'],
-                                          subject: subject,
-                                          facultyName: widget.facultyName,
-                                          branchName: widget.branchName,
-                                          semesterName: widget.semesterName,
-                                          role: role, // Add this line
-                                        ),
-                                      ),
-                                    );
-                                  } else if (role == 'admin' ||
-                                      role == 'CR' ||
-                                      role == 'dataeditor') {
-                                    Navigator.push(
-                                      context,
-                                      SlideLeftPageRoute(
-                                        page: Materialsectionpage_Admin(
-                                          subjectName: subject['subjectName'],
-                                          subject: subject,
-                                          facultyName: widget.facultyName,
-                                          branchName: widget.branchName,
-                                          semesterName: widget.semesterName,
-                                          role: role,
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                });
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Colors.white,
-                                ),
                               ),
-                              child: Text(
-                                'View',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            )
-                          ],
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: TextField(
+                      onChanged: (value) => setState(() => searchQuery = value),
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: "Search...",
+                        hintStyle: TextStyle(color: Colors.white60),
+                        prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                        filled: true,
+                        fillColor: Color(0xFF323232),
+                        contentPadding: EdgeInsets.all(12),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Color(0xFF323232)),
                         ),
                       ),
                     ),
                   ),
-                );
-              },
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: filteredSubjects.length,
+                      itemBuilder: (context, index) {
+                        String subjectKey = filteredSubjects.keys.elementAt(index);
+                        Map subject = filteredSubjects[subjectKey];
+
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: isDesktop ? 24 : 16),
+                          child: Container(
+                            height: isDesktop ? 80 : 70,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(50, 50, 50, 1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.subject, color: Colors.white),
+                                      SizedBox(width: 12),
+                                      Text(
+                                        subject['subjectName'] ?? 'Default Subject Name',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: isDesktop ? 18 : 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      getUserRole().then((role) {
+                                        if (role == 'student' || role == 'verificationist') {
+                                          Navigator.push(
+                                            context,
+                                            SlideLeftPageRoute(
+                                              page: Materialsectionpage(
+                                                subjectName: subject['subjectName'],
+                                                subject: subject,
+                                                facultyName: widget.facultyName,
+                                                branchName: widget.branchName,
+                                                semesterName: widget.semesterName,
+                                                role: role,
+                                              ),
+                                            ),
+                                          );
+                                        } else if (role == 'admin' || role == 'CR' || role == 'dataeditor') {
+                                          Navigator.push(
+                                            context,
+                                            SlideLeftPageRoute(
+                                              page: Materialsectionpage_Admin(
+                                                subjectName: subject['subjectName'],
+                                                subject: subject,
+                                                facultyName: widget.facultyName,
+                                                branchName: widget.branchName,
+                                                semesterName: widget.semesterName,
+                                                role: role,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      });
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                    ),
+                                    child: Text(
+                                      'View',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: isDesktop ? 16 : 14,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
       floatingActionButton: widget.role == "admin"
           ? FloatingActionButton(
-              onPressed:
-                  _showAddMaterialDialog, // Function to show popup dialog
-              child: Icon(Icons.add,
-                  color: Colors.white), // Set icon color to white
-              backgroundColor:
-                  Color(0xFF323232), // Set background color to BD-323232
+              onPressed: _showAddMaterialDialog,
+              child: Icon(Icons.add, color: Colors.white),
+              backgroundColor: Color(0xFF323232),
             )
           : SizedBox.shrink(), 
     );
@@ -298,8 +276,7 @@ class SlideLeftPageRoute<T> extends PageRouteBuilder<T> {
             const end = Offset.zero;
             const curve = Curves.ease;
 
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             var offsetAnimation = animation.drive(tween);
 
             return SlideTransition(

@@ -24,120 +24,118 @@ class Materialsectionpage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          final contentWidth = isDesktop ? 600.0 : constraints.maxWidth;
+
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: contentWidth),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Navigate back
-                        },
+                  SafeArea(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                subjectName,
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 32 : 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(
-                        subjectName,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white, // Text color
-                        ),
-                      ),
-                    ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: materials.length,
+                      itemBuilder: (context, index) {
+                        String materialKey = materials.keys.elementAt(index);
+                        Map material = materials[materialKey];
+
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: isDesktop ? 24 : 16),
+                          child: Container(
+                            height: isDesktop ? 80 : 70,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(50, 50, 50, 1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.school, color: Colors.white),
+                                      SizedBox(width: 12),
+                                      Text(
+                                        material['materialName'] ?? 'Default Material Name',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: isDesktop ? 18 : 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        SlideRightPageRoute(
+                                          page: Materialpage(
+                                            materialName: material['materialName'],
+                                            material: material,
+                                            facultyName: facultyName,
+                                            branchName: branchName,
+                                            semesterName: semesterName,
+                                            subjectName: subjectName,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                    ),
+                                    child: Text(
+                                      'View',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: isDesktop ? 16 : 14,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: materials.length,
-              itemBuilder: (context, index) {
-                String materialKey = materials.keys.elementAt(index);
-                Map material = materials[materialKey];
-
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 7.0, horizontal: 27.0),
-                  child: GestureDetector(
-                    child: Container(
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(50, 50, 50, 1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.school,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  material['materialName'] ??
-                                      'Default Material Name',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  SlideRightPageRoute(
-                                    page: Materialpage(
-                                      materialName: material['materialName'],
-                                      material: material,
-                                      facultyName: facultyName,
-                                      branchName: branchName,
-                                      semesterName: semesterName,
-                                      subjectName: subjectName,
-                                    ),
-                                  ),
-                                );
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Colors.white,
-                                ),
-                              ),
-                              child: Text(
-                                'View',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
