@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyC4SqQj3nQJ9zAJ1oPj3RH-UgIB8DRgZSg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>379236444299</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.seekhobuddy</string>
+	<key>PROJECT_ID</key>
+	<string>seekhobuddy</string>
+	<key>STORAGE_BUCKET</key>
+	<string>seekhobuddy.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:379236444299:ios:1da64bd98265ff73228c8e</string>
+	<key>DATABASE_URL</key>
+	<string>https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>

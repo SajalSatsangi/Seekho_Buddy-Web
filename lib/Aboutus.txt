@@ -1,0 +1,49 @@
+Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "SeekhoBuddy Team",
+                            style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.07,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.width * 0.05),
+                          ProfileCard(
+                            name: 'Nihal Saran',
+                            imageUrl:
+                                'https://media.licdn.com/dms/image/D4D03AQFaaIZWO9IPQw/profile-displayphoto-shrink_100_100/0/1706756591651?e=1722470400&v=beta&t=OGajEuphTl79NiJXhFqNqhQGjLiS0BB0LzR8DYc8lnI',
+                            isImageRight: false,
+                            linkedinUrl:
+                                'https://www.linkedin.com/in/nihal-saran/',
+                          ),
+                          ProfileCard(
+                            name: 'Sajal Satsangi',
+                            imageUrl:
+                                'https://media.licdn.com/dms/image/D4D03AQGbLkLrr_VNKA/profile-displayphoto-shrink_400_400/0/1689824948962?e=1722470400&v=beta&t=SuvABQD393ep4IaHNzgMFIkI0OYIWl_PPT42dXzJDhU',
+                            isImageRight: true,
+                            linkedinUrl:
+                                'https://www.linkedin.com/in/sajal-satsangi/',
+                          ),
+                          ProfileCard(
+                            name: 'Ansh Prasad',
+                            imageUrl:
+                                'https://media.licdn.com/dms/image/D4D03AQFYjXW3zGg0Kg/profile-displayphoto-shrink_100_100/0/1674130190372?e=1722470400&v=beta&t=3K1-c3toN7nWILNTBl1NMIFavi6ZT5EDxJQDMrlkZzA',
+                            isImageRight: false,
+                            linkedinUrl:
+                                'https://www.linkedin.com/in/ansh-prasad/',
+                          ),
+                          ProfileCard(
+                            name: 'N. Shikhar',
+                            imageUrl:
+                                'https://media.licdn.com/dms/image/D4D03AQEJoLYZ8IkgeA/profile-displayphoto-shrink_100_100/0/1685933964356?e=1722470400&v=beta&t=OMxYQxVsDYn46NOUwWvAz_UOb9tsNiBo5tDXLHNwDhA',
+                            isImageRight: true,
+                            linkedinUrl:
+                                'https://www.linkedin.com/in/n-shikhar/',
+                          ),
+                        ],
+                      ),
+                    

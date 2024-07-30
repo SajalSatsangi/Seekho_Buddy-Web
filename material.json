@@ -1,0 +1,29 @@
+{
+    "Material DB": {
+      "Faculty1": {
+        "name": "Faculty of Science",
+        "description": "Description for Faculty of Science",
+        "branches": {
+          "Branch1": "Biology",
+          "Branch2": "Chemistry"
+        }
+      },
+      "Faculty2": {
+        "name": "Faculty of Arts",
+        "description": "Description for Faculty of Arts",
+        "branches": {
+          "Branch1": "History",
+          "Branch2": "Literature"
+        }
+      },
+      "Faculty3": {
+        "name": "Faculty of Engineering",
+        "description": "Description for Faculty of Engineering",
+        "branches": {
+          "Branch1": "Mechanical",
+          "Branch2": "Electrical"
+        }
+      }
+    }
+  }
+  
