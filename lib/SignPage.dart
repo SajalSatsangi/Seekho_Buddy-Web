@@ -3,13 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:seekhobuddy/LoginPage.dart';
-import 'package:seekhobuddy/emailVerificationWaiting.dart';
+// import 'package:seekhobuddy/emailVerificationWaiting.dart';
 import 'package:seekhobuddy/dropdown_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:file_picker/file_picker.dart';
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:seekhobuddy/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,9 +52,6 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _rollnoController = TextEditingController();
 
-
-  String? _idCardUrl;  // A
-
   final _formKey = GlobalKey<FormState>();
 
   String? _selectedFaculty;
@@ -65,14 +60,12 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
   String? _selectedSubbranch;
 
   @override
- @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF161616),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            // Determine if it's a desktop layout
             bool isDesktop = constraints.maxWidth > 600;
 
             double padding = isDesktop ? 40 : constraints.maxWidth * 0.08;
@@ -269,12 +262,6 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                                 iconSize: iconSize,
                                 fontSize: inputFontSize,
                               ),
-                              SizedBox(height: spacingHeight * 1),
-                              _buildUploadField(
-                                height: inputFieldHeight,
-                                iconSize: iconSize,
-                                fontSize: inputFontSize,
-                              ),
                               SizedBox(height: spacingHeight * 2),
                               ElevatedButton(
                                 onPressed: _signUp,
@@ -350,74 +337,59 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
   }
 
   Future<void> _signUp() async {
-  if (_formKey.currentState!.validate()) {
-    // Add this block to validate ID card upload
-    if (_idCardUrl == null) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please upload your ID card')),
-        );
-      }
-      return;  // Exit the function if ID card is not uploaded
-    }
-
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-
-      String uid = userCredential.user!.uid;
-
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(_emailController.text)
-          .set({
-        'uid': uid,
-        'email': _emailController.text,
-        'name': _nameController.text,
-        'faculty': _selectedFaculty,
-        'subfaculty': _selectedSubfaculty,
-        'semester': _selectedSemester,
-        'subbranch': _selectedSubbranch,
-        'rollno': _rollnoController.text,
-        'profile_picture': 'https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg',
-        'role': 'student',
-        'verifiedstatus': 'False',
-        'status': '',
-        'date': '',
-        'idCardUrl': _idCardUrl,  // Add this line to save the ID card URL
-      });
-
-      await sendWelcomeEmail(
-        _emailController.text,
-        _nameController.text,
-      );
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Signed up successfully'),
-            duration: Duration(seconds: 2),
-          ),
+    if (_formKey.currentState!.validate()) {
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
         );
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => WaitingVerification()),
+        String uid = userCredential.user!.uid;
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_emailController.text)
+            .set({
+          'uid': uid,
+          'email': _emailController.text,
+          'name': _nameController.text,
+          'faculty': _selectedFaculty,
+          'subfaculty': _selectedSubfaculty,
+          'semester': _selectedSemester,
+          'subbranch': _selectedSubbranch,
+          'rollno': _rollnoController.text,
+          'profile_picture': 'https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg',
+          'role': 'student',
+        });
+
+        await sendWelcomeEmail(
+          _emailController.text,
+          _nameController.text,
         );
-      }
-    } on FirebaseAuthException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to sign up: ${e.message}')),
-        );
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Signed up successfully'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Home()),
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to sign up: ${e.message}')),
+          );
+        }
       }
     }
   }
-}
 
   Future<void> sendWelcomeEmail(String email, String name) async {
     const url = 'https://seekhobuddy-mailer.vercel.app/api/send-emailsignup';
@@ -469,12 +441,12 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                 keyboardType: keyboardType,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: fontSize), // Responsive font size here
+                    fontSize: fontSize),
                 decoration: InputDecoration(
                   hintText: hintText,
                   hintStyle: TextStyle(
                       color: Colors.white70,
-                      fontSize: fontSize), // Responsive hint text size here
+                      fontSize: fontSize),
                   filled: true,
                   fillColor: Colors.grey.shade800,
                   contentPadding: EdgeInsets.symmetric(vertical: 10).copyWith(
@@ -526,7 +498,7 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                     value: value,
                     child: Text(
                       value,
-                      textAlign: TextAlign.center, // Center-align the text here
+                      textAlign: TextAlign.center,
                       style: TextStyle(fontSize: fontSize),
                     ),
                   );
@@ -535,12 +507,12 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                   hintText: hintText,
                   hintStyle: TextStyle(
                       color: Colors.white70,
-                      fontSize: fontSize), // Responsive hint text size here
+                      fontSize: fontSize),
                   filled: true,
                   fillColor: Colors.grey.shade800,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 10,
-                    vertical: (height - 50) / 2, // Adjust vertical padding
+                    vertical: (height - 50) / 2,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50.0),
@@ -550,11 +522,9 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                 validator: validator,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize:
-                        fontSize), // Responsive selected item font size here
-                iconEnabledColor: Colors.white, // Change dropdown icon color
-                dropdownColor:
-                    Colors.grey.shade800, // Change dropdown background color
+                    fontSize: fontSize),
+                iconEnabledColor: Colors.white,
+                dropdownColor: Colors.grey.shade800,
               ),
             ),
           ),
@@ -562,87 +532,4 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
       ),
     );
   }
-
-  Widget _buildUploadField({
-  required double height,
-  required double iconSize,
-  required double fontSize,
-}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 30),
-    child: Row(
-      children: [
-        Icon(
-          Icons.attach_file,
-          color: Colors.white,
-          size: iconSize,
-        ),
-        SizedBox(width: 5),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: const Color.fromARGB(255, 72, 72, 72),
-            ),
-            height: height,
-            child: TextButton(
-              onPressed: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  type: FileType.custom,
-                  allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
-                );
-
-                if (result != null) {
-                  PlatformFile file = result.files.first;
-
-                  // Get a reference to storage root
-                  Reference storageReference = FirebaseStorage.instance.ref();
-
-                  // Create a reference for the image to be stored
-                  Reference imageReference = storageReference.child('idCards/${_nameController.text}_idCard.${file.extension}');
-
-                  // Create UploadTask
-                  UploadTask uploadTask = imageReference.putFile(File(file.path!));
-
-                  // Wait for the upload to complete
-                  TaskSnapshot snapshot = await uploadTask;
-
-                  // Get the download URL
-                  String downloadUrl = await snapshot.ref.getDownloadURL();
-
-                  // Update the state with the ID card URL
-                  setState(() {
-                    _idCardUrl = downloadUrl;
-                  });
-
-                  // Show a success message
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('ID Card uploaded successfully')),
-                    );
-                  }
-                } else {
-                  // User canceled the picker
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('No file selected')),
-                    );
-                  }
-                }
-              },
-              child: Text(
-                _idCardUrl == null ? 'Upload ID Card *' : 'ID Card Uploaded ✓',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: const Color.fromARGB(179, 234, 234, 234),
-                  fontSize: fontSize,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
 }

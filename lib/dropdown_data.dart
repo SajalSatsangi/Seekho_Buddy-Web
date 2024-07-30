@@ -99,20 +99,24 @@ final Map<String, List<String>> subbranches = {
     'NIL',
   ],
   'Faculty of Engineering_Electrical_Semester 5': [
-    'Subbranch 9',
-    'Subbranch 10'
+    'Computer Science',
+    'Electronics',
+    'Electrical',
   ],
   'Faculty of Engineering_Electrical_Semester 6': [
     'Computer Science',
-    'Subbranch 12'
+    'Electronics',
+    'Electrical',
   ],
   'Faculty of Engineering_Electrical_Semester 7': [
-    'Subbranch 13',
-    'Subbranch 14'
+    'Computer Science',
+    'Electronics',
+    'Electrical',
   ],
   'Faculty of Engineering_Electrical_Semester 8': [
-    'Subbranch 15',
-    'Subbranch 16'
+    'Computer Science',
+    'Electronics',
+    'Electrical',
   ],
   'Faculty of Engineering_Mechanical_Semester 3': [
     'NIL',
@@ -121,24 +125,27 @@ final Map<String, List<String>> subbranches = {
     'NIL',
   ],
   'Faculty of Engineering_Mechanical_Semester 5': [
-    'Subbranch 13',
-    'Subbranch 14'
+    'Computer Science',
+    'Industrial',
+    'Mechanical',
   ],
   'Faculty of Engineering_Mechanical_Semester 6': [
     'Computer Science',
-    'Subbranch 16'
+    'Industrial',
+    'Mechanical',
   ],
   'Faculty of Engineering_Mechanical_Semester 7': [
-    'Subbranch 17',
-    'Subbranch 18'
+    'Computer Science',
+    'Industrial',
+    'Mechanical',
   ],
   'Faculty of Engineering_Mechanical_Semester 8': [
-    'Subbranch 19',
-    'Subbranch 20'
+    'Computer Science',
+    'Industrial',
+    'Mechanical',
   ],
   'Faculty of Engineering_Civil_Semester 3': [
-    'Subbranch 19',
-    'Subbranch 20'
+    'Computer Science',
   ],
   'Faculty of Engineering_Civil_Semester 4': [
     'Subbranch 21',
