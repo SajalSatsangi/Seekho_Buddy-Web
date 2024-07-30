@@ -10,7 +10,7 @@ class ProfileScreenAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'StudyHub',
+      title: 'Seekho Buddy',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: AppBarTheme(

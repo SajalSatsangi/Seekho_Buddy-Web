@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'StudyHub',
+      title: 'SeekhoBuddy',
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.black,

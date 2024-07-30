@@ -32,7 +32,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'StudyHub',
+      title: 'Seekho Buddy',
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: const Color.fromRGBO(0, 0, 0, 1),

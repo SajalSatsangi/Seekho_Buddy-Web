@@ -104517,7 +104517,7 @@ return A.aWY(A.I_(B.U,d,A.bG(B.eL,b,null)),r)},
 $S:694}
 A.qo.prototype={
 G(a){var s=null
-return A.jq(!0,new A.H2(s),A.fb(A.aWU(s,B.j,s,s,s,s,s,s,s,s,s,s,s,s,s),s,s,s,s,B.j,A.Jz(A.a1(s,s,B.e,s,s,s,s,s,s,s,s,s,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),A.a1(s,s,B.e,s,s,s,s,s,s,s,s,s,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s,s,s,s,s,s,s,s,s,s,s,s),s,s),"StudyHub")}}
+return A.jq(!0,new A.H2(s),A.fb(A.aWU(s,B.j,s,s,s,s,s,s,s,s,s,s,s,s,s),s,s,s,s,B.j,A.Jz(A.a1(s,s,B.e,s,s,s,s,s,s,s,s,s,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),A.a1(s,s,B.e,s,s,s,s,s,s,s,s,s,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s,s,s,s,s,s,s,s,s,s,s,s),s,s),"Seekho Buddy")}}
 A.H2.prototype={
 ab(){var s=$.ap,r=(s==null?$.ap=$.bu():s).bf("[DEFAULT]")
 A.aW(r,$.bK(),!0)
@@ -105779,7 +105779,7 @@ $R:4,
 $S:39}
 A.mt.prototype={
 G(a){var s=null
-return A.jq(!0,new A.J_(s),A.fb(s,B.aa,B.e,B.j,s,s,s,s,s),"StudyHub")}}
+return A.jq(!0,new A.J_(s),A.fb(s,B.aa,B.e,B.j,s,s,s,s,s),"SeekhoBuddy")}}
 A.J_.prototype={
 ab(){var s,r,q="[DEFAULT]",p=$.az(),o=$.ap,n=(o==null?$.ap=$.bu():o).bf(q)
 o=$.bK()
@@ -106777,7 +106777,7 @@ $0(){return this.a.l0(this.b,this.c)},
 $S:0}
 A.zK.prototype={
 G(a){var s=null
-return A.jq(!0,new A.J0(s),A.fb(s,B.aa,B.e,B.j,s,s,s,s,s),"StudyHub")}}
+return A.jq(!0,new A.J0(s),A.fb(s,B.aa,B.e,B.j,s,s,s,s,s),"Seekho Buddy")}}
 A.J0.prototype={
 ab(){var s=$.az()
 return new A.NO(new A.dx(B.au,s),new A.dx(B.au,s),new A.dx(B.au,s),new A.dx(B.au,s),new A.bc(null,t.am),B.l)}}
