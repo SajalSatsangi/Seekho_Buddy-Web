@@ -61,195 +61,220 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isDesktop = constraints.maxWidth > 600;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Padding(
-          padding: EdgeInsets.only(
-              left: screenWidth * 0.05,
-              right: screenWidth * 0.04,
-              top: screenHeight * 0.025),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Profile",
-                style: TextStyle(
-                  fontSize: screenWidth * 0.065,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Row(
+        double padding = isDesktop ? 40 : constraints.maxWidth * 0.08;
+        double iconSize = isDesktop ? 30 : constraints.maxWidth * 0.07;
+        double fontSizeTitle = isDesktop ? 32 : constraints.maxWidth * 0.06;
+        double fontSizeSubtitle = isDesktop ? 18 : constraints.maxWidth * 0.04;
+        double spacingHeight = isDesktop ? 20 : constraints.maxHeight * 0.02;
+        double inputFontSize = isDesktop ? 16 : constraints.maxWidth * 0.035;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Padding(
+              padding: EdgeInsets.only(
+                  left: padding,
+                  right: padding,
+                  top: spacingHeight,
+                  bottom: spacingHeight),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.edit,
+                  Text(
+                    "Profile",
+                    style: TextStyle(
+                      fontSize: fontSizeTitle,
+                      fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      size: screenWidth * 0.06,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EditProfile()),
-                      );
-                    },
                   ),
-                  Visibility(
-                    visible: userData != null &&
-                        (userData!['role'] == 'admin' ||
-                            userData!['role'] == 'verificationist'),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.request_page,
-                        color: Colors.white,
-                        size: screenWidth * 0.06,
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: iconSize,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile()),
+                          );
+                        },
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => VerificationApp()),
-                        );
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: userData != null &&
-                        (userData!['role'] == 'admin' ||
-                            userData!['role'] == 'dataeditor'),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: screenWidth * 0.06,
+                      Visibility(
+                        visible: userData != null &&
+                            (userData!['role'] == 'admin' ||
+                                userData!['role'] == 'verificationist'),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.request_page,
+                            color: Colors.white,
+                            size: iconSize,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => VerificationApp()),
+                            );
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => userdata()),
-                        );
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: userData != null &&
-                        (userData!['role'] == 'admin' ||
-                            userData!['role'] == 'dataeditor'),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.book,
-                        color: Colors.white,
-                        size: screenWidth * 0.06,
+                      Visibility(
+                        visible: userData != null &&
+                            (userData!['role'] == 'admin' ||
+                                userData!['role'] == 'dataeditor'),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: iconSize,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => userdata()),
+                            );
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MaterialConfirmationScreen()),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: userData == null
-          ? Center(child: CircularProgressIndicator())
-          : Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(screenWidth * 0.07),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: screenHeight * 0.04),
-                      Center(
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: screenWidth * 0.15,
-                              backgroundImage:
-                                  NetworkImage(userData!['profile_picture']),
-                            ),
-                            SizedBox(height: screenHeight * 0.03),
-                            Text(
-                              userData!['name'],
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.065,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: screenHeight * 0.005),
-                            Text(
-                              userData!['email'],
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.035,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(height: screenHeight * 0.03),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                buildInfoBox(
-                                  label: 'University',
-                                  text: 'Dayalbagh Educational Institute',
-                                  icon: Icons.location_city,
-                                  screenWidth: screenWidth,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                buildInfoBox(
-                                  label: 'Roll Number',
-                                  text: userData!['rollno'],
-                                  icon: Icons.confirmation_number,
-                                  screenWidth: screenWidth,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                buildInfoBox(
-                                  label: 'Faculty',
-                                  text: userData!['faculty'],
-                                  icon: Icons.account_balance,
-                                  screenWidth: screenWidth,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                buildInfoBox(
-                                  label: 'Branch',
-                                  text: userData!['subfaculty'],
-                                  icon: Icons.category,
-                                  screenWidth: screenWidth,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                buildInfoBox(
-                                  label: 'Specialization',
-                                  text: userData!['subbranch'],
-                                  icon: Icons.spa,
-                                  screenWidth: screenWidth,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                buildInfoBox(
-                                  label: 'Semester',
-                                  text: userData!['semester'],
-                                  icon: Icons.timeline,
-                                  screenWidth: screenWidth,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                          ],
+                      Visibility(
+                        visible: userData != null &&
+                            (userData!['role'] == 'admin' ||
+                                userData!['role'] == 'dataeditor'),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.book,
+                            color: Colors.white,
+                            size: iconSize,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MaterialConfirmationScreen()),
+                            );
+                          },
                         ),
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
             ),
+          ),
+          body: userData == null
+              ? Center(child: CircularProgressIndicator())
+              : Center(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(padding),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: spacingHeight),
+                          Center(
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: iconSize * 2,
+                                  backgroundImage: NetworkImage(
+                                      userData!['profile_picture']),
+                                ),
+                                SizedBox(height: spacingHeight),
+                                Text(
+                                  userData!['name'],
+                                  style: TextStyle(
+                                    fontSize: fontSizeTitle,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: spacingHeight * 0.25),
+                                Text(
+                                  userData!['email'],
+                                  style: TextStyle(
+                                    fontSize: fontSizeSubtitle,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: spacingHeight),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    buildInfoBox(
+                                      label: 'University',
+                                      text: 'Dayalbagh Educational Institute',
+                                      icon: Icons.location_city,
+                                      screenWidth: constraints.maxWidth,
+                                      iconSize: iconSize,
+                                      fontSize: inputFontSize,
+                                    ),
+                                    SizedBox(height: spacingHeight * 0.5),
+                                    buildInfoBox(
+                                      label: 'Roll Number',
+                                      text: userData!['rollno'],
+                                      icon: Icons.confirmation_number,
+                                      screenWidth: constraints.maxWidth,
+                                      iconSize: iconSize,
+                                      fontSize: inputFontSize,
+                                    ),
+                                    SizedBox(height: spacingHeight * 0.5),
+                                    buildInfoBox(
+                                      label: 'Faculty',
+                                      text: userData!['faculty'],
+                                      icon: Icons.account_balance,
+                                      screenWidth: constraints.maxWidth,
+                                      iconSize: iconSize,
+                                      fontSize: inputFontSize,
+                                    ),
+                                    SizedBox(height: spacingHeight * 0.5),
+                                    buildInfoBox(
+                                      label: 'Branch',
+                                      text: userData!['subfaculty'],
+                                      icon: Icons.category,
+                                      screenWidth: constraints.maxWidth,
+                                      iconSize: iconSize,
+                                      fontSize: inputFontSize,
+                                    ),
+                                    SizedBox(height: spacingHeight * 0.5),
+                                    buildInfoBox(
+                                      label: 'Specialization',
+                                      text: userData!['subbranch'],
+                                      icon: Icons.spa,
+                                      screenWidth: constraints.maxWidth,
+                                      iconSize: iconSize,
+                                      fontSize: inputFontSize,
+                                    ),
+                                    SizedBox(height: spacingHeight * 0.5),
+                                    buildInfoBox(
+                                      label: 'Semester',
+                                      text: userData!['semester'],
+                                      icon: Icons.timeline,
+                                      screenWidth: constraints.maxWidth,
+                                      iconSize: iconSize,
+                                      fontSize: inputFontSize,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: spacingHeight),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+        );
+      },
     );
   }
 
@@ -258,6 +283,8 @@ class _ProfilePageState extends State<ProfilePage> {
     required String text,
     required IconData icon,
     required double screenWidth,
+    required double iconSize,
+    required double fontSize,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: screenWidth * 0.005),
@@ -275,14 +302,14 @@ class _ProfilePageState extends State<ProfilePage> {
             Icon(
               icon,
               color: Color.fromARGB(255, 255, 255, 255),
-              size: screenWidth * 0.07,
+              size: iconSize,
             ),
             SizedBox(width: screenWidth * 0.04),
             Text(
               text,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: screenWidth * 0.035,
+                fontSize: fontSize,
               ),
             ),
           ],
