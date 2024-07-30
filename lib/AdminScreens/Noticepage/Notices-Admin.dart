@@ -62,7 +62,6 @@ class _MyWidgetState extends State<MyWidget> {
 
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-      // This will be called whenever a notification is opened
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => NoticesAdmin()),
@@ -75,13 +74,11 @@ class _MyWidgetState extends State<MyWidget> {
 
     OneSignal.shared.setNotificationWillShowInForegroundHandler(
         (OSNotificationReceivedEvent event) {
-      // Display notification in the foreground
       print(
           'Notification received with data: ${event.notification.additionalData}');
       event.complete(event.notification);
     });
 
-    // Fetch the Player ID
     var deviceState = await OneSignal.shared.getDeviceState();
     if (deviceState != null) {
       setState(() {
@@ -92,40 +89,38 @@ class _MyWidgetState extends State<MyWidget> {
   }
 
   Future<void> fetchUserData() async {
-  prefs = await SharedPreferences.getInstance();
-  DateTime lastFetchTime =
-      DateTime.parse(prefs.getString('lastFetchTime') ?? '2000-01-01');
-  DateTime now = DateTime.now();
+    prefs = await SharedPreferences.getInstance();
+    DateTime lastFetchTime =
+        DateTime.parse(prefs.getString('lastFetchTime') ?? '2000-01-01');
+    DateTime now = DateTime.now();
 
-  final User? user = FirebaseAuth.instance.currentUser;
+    final User? user = FirebaseAuth.instance.currentUser;
 
-  if (now.difference(lastFetchTime).inDays >= 1 || userData == null) {
-    if (user != null) {
-      var querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('uid', isEqualTo: user.uid)
-          .get();
+    if (now.difference(lastFetchTime).inDays >= 1 || userData == null) {
+      if (user != null) {
+        var querySnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .where('uid', isEqualTo: user.uid)
+            .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        setState(() {
-          userData = querySnapshot.docs.first;
-          print('User role: ${userData!['role']}'); // Print the user's role
-          saveUserDataLocally(); // Save data locally when fetched
-          prefs.setString('lastFetchTime', now.toIso8601String());
-        });
+        if (querySnapshot.docs.isNotEmpty) {
+          setState(() {
+            userData = querySnapshot.docs.first;
+            print('User role: ${userData!['role']}');
+            saveUserDataLocally();
+            prefs.setString('lastFetchTime', now.toIso8601String());
+          });
+        }
       }
     }
   }
-}
 
   void listenForNewNotices() {
     collectionRef.snapshots().listen((snapshot) {
       snapshot.docChanges.forEach((change) {
         if (change.type == DocumentChangeType.added) {
-          // A new document was added
           Map<String, dynamic> data = change.doc.data() as Map<String, dynamic>;
           if (shouldRenderNotice(data)) {
-            // If the notice is relevant to the user, display a notification
             _showNotification(data['title'], data['description']);
           }
         }
@@ -139,7 +134,6 @@ class _MyWidgetState extends State<MyWidget> {
       return;
     }
 
-    // Use OneSignal to show notification
     OneSignal.shared.postNotification(OSCreateNotification(
       playerIds: [_playerId!],
       content: description,
@@ -166,207 +160,208 @@ class _MyWidgetState extends State<MyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double paddingSize = screenWidth * 0.04;
-    double iconSize = screenWidth * 0.06;
-    double fontSizeTitle = screenWidth * 0.04;
-    double fontSizeDescription = screenWidth * 0.035;
-    double fontSizeDate = screenWidth * 0.03;
-
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: screenHeight * 0.035),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  left: paddingSize,
-                  right: paddingSize,
-                  top: screenHeight * 0.01),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios,
-                            color: Colors.white, size: iconSize),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = constraints.maxWidth > 600;
+          final contentWidth = isDesktop ? 600.0 : constraints.maxWidth;
+          
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 800),
+              child: Padding(
+                padding: EdgeInsets.only(top: isDesktop ? 40 : 20),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.arrow_back_ios,
+                                    color: Colors.white,
+                                    size: isDesktop ? 28 : 24),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => Home()),
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Notices",
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 32 : 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20, vertical: isDesktop ? 20 : 16),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: "Search...",
+                          hintStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: isDesktop ? 18 : 16),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.white,
+                            size: isDesktop ? 28 : 24,
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFF323232),
+                          contentPadding: EdgeInsets.all(12),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Color(0xFF323232)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: collectionRef.snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            return Text('Something went wrong');
+                          }
+
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Text("Loading");
+                          }
+
+                          if (userData == null) {
+                            return Text("Loading user data...");
+                          }
+
+                          return ListView(
+                            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                              if (shouldRenderNotice(data)) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      clickedNotices.add(document.id);
+                                      saveClickedNotices();
+                                    });
+                                    showMaintenanceNotice(context, data['title'],
+                                        data['description'], data['fileUrl']);
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: isDesktop ? 12 : 8),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          width: contentWidth,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF323232).withOpacity(
+                                                clickedNotices.contains(document.id)
+                                                    ? 0.6
+                                                    : 1.0),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          padding: EdgeInsets.all(16),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                data['title'],
+                                                style: TextStyle(
+                                                  fontSize: isDesktop ? 20 : 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white.withOpacity(
+                                                      clickedNotices.contains(document.id)
+                                                          ? 0.6
+                                                          : 1.0),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                data['description'],
+                                                style: TextStyle(
+                                                  color: Colors.white.withOpacity(
+                                                      clickedNotices.contains(document.id)
+                                                          ? 0.6
+                                                          : 1.0),
+                                                  fontSize: isDesktop ? 16 : 14,
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                "Posted on: ${data['date']}",
+                                                style: TextStyle(
+                                                  color: Colors.grey.withOpacity(
+                                                      clickedNotices.contains(document.id)
+                                                          ? 0.6
+                                                          : 1.0),
+                                                  fontSize: isDesktop ? 14 : 12,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        if (!clickedNotices.contains(document.id))
+                                          Positioned(
+                                            bottom: 16,
+                                            right: 16,
+                                            child: Container(
+                                              width: isDesktop ? 16 : 12,
+                                              height: isDesktop ? 16 : 12,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromARGB(255, 230, 61, 27),
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return SizedBox.shrink();
+                              }
+                            }).toList(),
                           );
                         },
                       ),
-                      SizedBox(width: screenWidth * 0.025),
-                      Text(
-                        "Notices",
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.07,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: paddingSize, vertical: screenHeight * 0.02),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search...",
-                  hintStyle: TextStyle(
-                      color: Colors.white, fontSize: fontSizeDescription),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: iconSize,
-                  ),
-                  filled: true,
-                  fillColor: Color(0xFF323232),
-                  contentPadding: EdgeInsets.all(screenWidth * 0.02),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Color(0xFF323232)),
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: collectionRef.snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Something went wrong');
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Text("Loading");
-                  }
-
-                  if (userData == null) {
-                    return Text("Loading user data...");
-                  }
-
-                  return new ListView(
-                    children:
-                        snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Map<String, dynamic> data =
-                          document.data() as Map<String, dynamic>;
-                      if (shouldRenderNotice(data)) {
-                        return new GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              clickedNotices.add(document.id);
-                              saveClickedNotices();
-                            });
-                            showMaintenanceNotice(context, data['title'],
-                                data['description'], data['fileUrl']);
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: paddingSize,
-                                vertical: screenHeight * 0.01),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF323232).withOpacity(
-                                        clickedNotices.contains(document.id)
-                                            ? 0.6
-                                            : 1.0),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: EdgeInsets.all(screenWidth * 0.04),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        data['title'],
-                                        style: TextStyle(
-                                          fontSize: fontSizeTitle,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white.withOpacity(
-                                              clickedNotices
-                                                      .contains(document.id)
-                                                  ? 0.6
-                                                  : 1.0),
-                                        ),
-                                      ),
-                                      SizedBox(height: screenHeight * 0.01),
-                                      Text(
-                                        data['description'],
-                                        style: TextStyle(
-                                          color: Colors.white.withOpacity(
-                                              clickedNotices
-                                                      .contains(document.id)
-                                                  ? 0.6
-                                                  : 1.0),
-                                          fontSize: fontSizeDescription,
-                                        ),
-                                      ),
-                                      SizedBox(height: screenHeight * 0.01),
-                                      Text(
-                                        "Posted on: ${data['date']}",
-                                        style: TextStyle(
-                                          color: Colors.grey.withOpacity(
-                                              clickedNotices
-                                                      .contains(document.id)
-                                                  ? 0.6
-                                                  : 1.0),
-                                          fontSize: fontSizeDate,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                if (!clickedNotices.contains(
-                                    document.id)) // Only show if not clicked
-                                  Positioned(
-                                    bottom: screenHeight * 0.02,
-                                    right: screenWidth * 0.04,
-                                    child: Container(
-                                      width: screenWidth * 0.04,
-                                      height: screenWidth * 0.04,
-                                      decoration: BoxDecoration(
-                                        color: Color.fromARGB(255, 230, 61, 27),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        );
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    }).toList(),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
       backgroundColor: Color(0xDD000000),
-      floatingActionButton: (userData != null && (userData!['role'] == 'admin' || userData!['role'] == 'CR' || userData!['role'] == 'dataeditor')) ? Padding(
-  padding: EdgeInsets.only(bottom: screenHeight * 0.02),
-  child: FloatingActionButton(
-    onPressed: () {
-      showAddPopup(context);
-    },
-    backgroundColor: Color(0xFF323232),
-    child: Icon(Icons.add, size: iconSize),
-  ),
-) : null,
+      floatingActionButton: (userData != null &&
+              (userData!['role'] == 'admin' ||
+                  userData!['role'] == 'CR' ||
+                  userData!['role'] == 'dataeditor'))
+          ? Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: FloatingActionButton(
+                onPressed: () {
+                  showAddPopup(context);
+                },
+                backgroundColor: Color(0xFF323232),
+                child: Icon(Icons.add, size: 24),
+              ),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
