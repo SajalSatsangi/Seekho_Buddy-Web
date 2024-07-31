@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -27,28 +28,31 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="SplashLogo.png"/>
+  <link rel="icon" type="image/png" href="SplashLogo.png" />
 
   <title>seekhobuddy</title>
   <link rel="manifest" href="manifest.json">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "3381949892";
+    const serviceWorkerVersion = "1579031478";
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
+
 <body>
   <script>
-    window.addEventListener('load', function(ev) {
+    window.addEventListener('load', function (ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
+        onEntrypointLoaded: function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
             appRunner.runApp();
           });
         }
@@ -62,8 +66,8 @@
       deferredPrompt = e;
     });
 
-    function promptInstall(){
-       deferredPrompt.prompt();
+    function promptInstall() {
+      deferredPrompt.prompt();
     }
 
     // Listen for app install event
@@ -75,7 +79,7 @@
     // Track how PWA was launched (either from browser or as PWA)
     function getLaunchMode() {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-      if(deferredPrompt) hasPrompt();
+      if (deferredPrompt) hasPrompt();
       if (document.referrer.startsWith('android-app://')) {
         appLaunchedAsTWA();
       } else if (navigator.standalone || isStandalone) {
@@ -84,6 +88,7 @@
         window.appLaunchedInBrowser();
       }
     }
-</script>
+  </script>
 </body>
+
 </html>
