@@ -45,7 +45,7 @@ class DefaultFirebaseOptions {
     appId: '1:379236444299:web:34f8654afc4420f0228c8e',
     messagingSenderId: '379236444299',
     projectId: 'seekhobuddy',
-    authDomain: 'seekhobuddy.firebaseapp.com',
+    authDomain: 'seekhobuddy.live',
     databaseURL: 'https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'seekhobuddy.appspot.com',
     measurementId: 'G-C857WLLKXH',
