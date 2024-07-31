@@ -266,18 +266,20 @@ class ExploreScreen extends StatelessWidget {
     final cardWidth = isDesktop ? 250.0 : 160.0;
     final cardHeight = isDesktop ? 200.0 : 160.0;
 
-    return Padding(
-      padding: EdgeInsets.only(left: isDesktop ? 20.0 : 5.0), // Add left margin for desktop, no margin for mobile
-      child: Wrap(
-        spacing: isDesktop ? 30 : 15,
-        runSpacing: isDesktop ? 16 : 8,
-        alignment: WrapAlignment.center,
-        children: [
-          _buildCard(context, 'Explore More', 'assets/Resource.svg', ComingSoonScreen(), cardWidth, cardHeight),
-          _buildCard(context, 'Notices', 'assets/Job.svg', NoticesAdmin(), cardWidth, cardHeight),
-          _buildCard(context, 'Projects', 'assets/Professional.svg', ComingSoonScreen(), cardWidth, cardHeight),
-          _buildCard(context, 'Networking', 'assets/Network.svg', ComingSoonScreen(), cardWidth, cardHeight),
-        ],
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.only(left: isDesktop ? 20.0 : 5.0), // Add left margin for desktop, no margin for mobile
+        child: Wrap(
+          spacing: isDesktop ? 30 : 15,
+          runSpacing: isDesktop ? 16 : 8,
+          alignment: WrapAlignment.center,
+          children: [
+            _buildCard(context, 'Explore More', 'assets/Resource.svg', ComingSoonScreen(), cardWidth, cardHeight),
+            _buildCard(context, 'Notices', 'assets/Job.svg', NoticesAdmin(), cardWidth, cardHeight),
+            _buildCard(context, 'Projects', 'assets/Professional.svg', ComingSoonScreen(), cardWidth, cardHeight),
+            _buildCard(context, 'Networking', 'assets/Network.svg', ComingSoonScreen(), cardWidth, cardHeight),
+          ],
+        ),
       ),
     );
   }
@@ -324,14 +326,16 @@ class ExploreScreen extends StatelessWidget {
     );
   }
   Widget _buildButtonRow(BuildContext context, bool isDesktop) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildButton(context, 'Donate', Icons.badge, const DonationPage(), isDesktop),
-        const SizedBox(width: 30),
-        _buildButton(context, 'Help', Icons.help, Newhelp(), isDesktop),
-        const SizedBox(width: 0), // Add spacing between the buttons
-      ],
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildButton(context, 'Donate', Icons.badge, const DonationPage(), isDesktop),
+          const SizedBox(width: 25),
+          _buildButton(context, 'Help', Icons.help, Newhelp(), isDesktop),
+          const SizedBox(width: 0), // Add spacing between the buttons
+        ],
+      ),
     );
   }
   Widget _buildButton(BuildContext context, String title, IconData icon, Widget nextPage, bool isDesktop) {
