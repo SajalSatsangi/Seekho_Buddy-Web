@@ -269,8 +269,8 @@ class ExploreScreen extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left: isDesktop ? 20.0 : 5.0), // Add left margin for desktop, no margin for mobile
       child: Wrap(
-        spacing: 30,
-        runSpacing: 16,
+        spacing: isDesktop ? 30 : 15,
+        runSpacing: isDesktop ? 16 : 8,
         alignment: WrapAlignment.center,
         children: [
           _buildCard(context, 'Explore More', 'assets/Resource.svg', ComingSoonScreen(), cardWidth, cardHeight),
@@ -328,7 +328,7 @@ class ExploreScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildButton(context, 'Donate', Icons.badge, const DonationPage(), isDesktop),
-        const SizedBox(width: 50),
+        const SizedBox(width: 30),
         _buildButton(context, 'Help', Icons.help, Newhelp(), isDesktop),
         const SizedBox(width: 0), // Add spacing between the buttons
       ],
