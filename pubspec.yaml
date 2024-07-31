@@ -43,6 +43,8 @@ dependencies:
   flutter_markdown: ^0.7.1
   markdown: ^7.2.2
   pwa_install: ^0.0.5
+  firebase_analytics_web: ^0.5.9+1
+  firebase_analytics: ^11.2.1
 
 
 dev_dependencies:

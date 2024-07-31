@@ -9,6 +9,7 @@ import 'package:seekhobuddy/AdminScreens/Profile-Admin.dart';
 import 'package:seekhobuddy/ComingSoonPage.dart';
 import 'package:seekhobuddy/aichat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 void main() {
   runApp(HomePage());

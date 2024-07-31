@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'firebase_options.dart';
 import 'home.dart';
 import 'Getstarred/landing.dart';
@@ -16,15 +16,21 @@ void main() async {
   );
   PWAInstall().setup(installCallback: () {
     debugPrint('APP INSTALLED!');
+    FirebaseAnalytics.instance.logEvent(name: 'app_installed');
   });
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
       home: Scaffold(
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -54,14 +60,36 @@ class AuthWrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           User? user = snapshot.data;
           if (user == null) {
+            FirebaseAnalytics.instance.logEvent(name: 'login_page_view');
             return LandingPage();
           } else {
-            return Home(); // Navigate to home if user is logged in
+            _logUserProperties(user);
+            return Home();
           }
         } else {
           return Center(child: CircularProgressIndicator());
         }
       },
     );
+  }
+
+  void _logUserProperties(User user) async {
+    await FirebaseAnalytics.instance.setUserId(id: user.uid);
+    await FirebaseAnalytics.instance.setUserProperty(
+      name: 'last_login',
+      value: DateTime.now().toIso8601String(),
+    );
+    await FirebaseAnalytics.instance.setUserProperty(
+      name: 'account_created',
+      value: user.metadata.creationTime?.toIso8601String() ?? 'unknown',
+    );
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'user_login',
+      parameters: {
+        'user_id': user.uid,
+        'email_verified': user.emailVerified.toString(),
+      },
+    );
+    await FirebaseAnalytics.instance.logEvent(name: 'home_page_view');
   }
 }
