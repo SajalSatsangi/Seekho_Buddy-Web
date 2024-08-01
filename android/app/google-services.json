@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "379236444299",
-    "firebase_url": "https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "seekhobuddy",
-    "storage_bucket": "seekhobuddy.appspot.com"
+    "project_number": "858700310760",
+    "project_id": "seekhobuddy-8e7d5",
+    "storage_bucket": "seekhobuddy-8e7d5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:379236444299:android:a459467fd36b29e5228c8e",
+        "mobilesdk_app_id": "1:858700310760:android:1002e39d55d17d76ad415d",
         "android_client_info": {
           "package_name": "com.app.seekhobuddy"
         }
@@ -16,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB2TVG4QnkJg9AVytJRcrh6iLwQgznc4RI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:379236444299:android:95c008b2ee92edbb228c8e",
-        "android_client_info": {
-          "package_name": "com.nuclex.seekhobuddy"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB2TVG4QnkJg9AVytJRcrh6iLwQgznc4RI"
+          "current_key": "AIzaSyD-zbWeXCne0hZ0U4JOakrpIfV-uVNwe7Q"
         }
       ],
       "services": {

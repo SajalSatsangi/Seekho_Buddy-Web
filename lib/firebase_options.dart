@@ -41,53 +41,48 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBmWKEO93cXQlNgvRoVMZ1prohyIA1IGZY',
-    appId: '1:379236444299:web:34f8654afc4420f0228c8e',
-    messagingSenderId: '379236444299',
-    projectId: 'seekhobuddy',
-    authDomain: 'https://www.seekhobuddy.live/',
-    databaseURL: 'https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'seekhobuddy.appspot.com',
-    measurementId: 'G-C857WLLKXH',
+    apiKey: 'AIzaSyB7BFqMfEwmYR5j0U3-yghM_CtsZ00Exb0',
+    appId: '1:858700310760:web:3dbd189fa1328452ad415d',
+    messagingSenderId: '858700310760',
+    projectId: 'seekhobuddy-8e7d5',
+    authDomain: 'seekhobuddy-8e7d5.firebaseapp.com',
+    storageBucket: 'seekhobuddy-8e7d5.appspot.com',
+    measurementId: 'G-WKDTQYJ36W',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB2TVG4QnkJg9AVytJRcrh6iLwQgznc4RI',
-    appId: '1:379236444299:android:a459467fd36b29e5228c8e',
-    messagingSenderId: '379236444299',
-    projectId: 'seekhobuddy',
-    databaseURL: 'https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'seekhobuddy.appspot.com',
+    apiKey: 'AIzaSyD-zbWeXCne0hZ0U4JOakrpIfV-uVNwe7Q',
+    appId: '1:858700310760:android:1002e39d55d17d76ad415d',
+    messagingSenderId: '858700310760',
+    projectId: 'seekhobuddy-8e7d5',
+    storageBucket: 'seekhobuddy-8e7d5.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC4SqQj3nQJ9zAJ1oPj3RH-UgIB8DRgZSg',
-    appId: '1:379236444299:ios:45bf742ea111f743228c8e',
-    messagingSenderId: '379236444299',
-    projectId: 'seekhobuddy',
-    databaseURL: 'https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'seekhobuddy.appspot.com',
+    apiKey: 'AIzaSyC31J_kkKj_INAO1xVHTXZUy8s8rL7FefQ',
+    appId: '1:858700310760:ios:40482ce39c3a7140ad415d',
+    messagingSenderId: '858700310760',
+    projectId: 'seekhobuddy-8e7d5',
+    storageBucket: 'seekhobuddy-8e7d5.appspot.com',
     iosBundleId: 'com.app.seekhobuddy',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC4SqQj3nQJ9zAJ1oPj3RH-UgIB8DRgZSg',
-    appId: '1:379236444299:ios:1da64bd98265ff73228c8e',
-    messagingSenderId: '379236444299',
-    projectId: 'seekhobuddy',
-    databaseURL: 'https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'seekhobuddy.appspot.com',
+    apiKey: 'AIzaSyC31J_kkKj_INAO1xVHTXZUy8s8rL7FefQ',
+    appId: '1:858700310760:ios:43835163727c9e98ad415d',
+    messagingSenderId: '858700310760',
+    projectId: 'seekhobuddy-8e7d5',
+    storageBucket: 'seekhobuddy-8e7d5.appspot.com',
     iosBundleId: 'com.example.seekhobuddy',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBmWKEO93cXQlNgvRoVMZ1prohyIA1IGZY',
-    appId: '1:379236444299:web:c7196176991b6e93228c8e',
-    messagingSenderId: '379236444299',
-    projectId: 'seekhobuddy',
-    authDomain: 'seekhobuddy.firebaseapp.com',
-    databaseURL: 'https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'seekhobuddy.appspot.com',
-    measurementId: 'G-PLM84CS3M8',
+    apiKey: 'AIzaSyB7BFqMfEwmYR5j0U3-yghM_CtsZ00Exb0',
+    appId: '1:858700310760:web:927e445ba5ec917cad415d',
+    messagingSenderId: '858700310760',
+    projectId: 'seekhobuddy-8e7d5',
+    authDomain: 'seekhobuddy-8e7d5.firebaseapp.com',
+    storageBucket: 'seekhobuddy-8e7d5.appspot.com',
+    measurementId: 'G-ND7KV2BYZP',
   );
 }
