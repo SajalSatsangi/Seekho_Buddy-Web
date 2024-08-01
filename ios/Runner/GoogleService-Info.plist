@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyC4SqQj3nQJ9zAJ1oPj3RH-UgIB8DRgZSg</string>
+	<string>AIzaSyC31J_kkKj_INAO1xVHTXZUy8s8rL7FefQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>379236444299</string>
+	<string>858700310760</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.app.seekhobuddy</string>
 	<key>PROJECT_ID</key>
-	<string>seekhobuddy</string>
+	<string>seekhobuddy-8e7d5</string>
 	<key>STORAGE_BUCKET</key>
-	<string>seekhobuddy.appspot.com</string>
+	<string>seekhobuddy-8e7d5.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,8 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:379236444299:ios:45bf742ea111f743228c8e</string>
-	<key>DATABASE_URL</key>
-	<string>https://seekhobuddy-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+	<string>1:858700310760:ios:40482ce39c3a7140ad415d</string>
 </dict>
 </plist>
