@@ -52,46 +52,29 @@ class _UserDataPageState extends State<UserDataPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "User Data",
+          style: TextStyle(fontSize: 18), // Adjust the font size of the app bar
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileScreenAdmin()),
+            );
+          },
+        ),
+      ),
       body: Padding(
         padding:
-            EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
+            EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
         child: Column(
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.04),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileScreenAdmin()),
-                          );
-                        },
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                      Text(
-                        "User Data",
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.08,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.04,
+                  horizontal: MediaQuery.of(context).size.width * 0.1,
                   vertical: MediaQuery.of(context).size.height * 0.01),
               child: TextField(
                 controller: _searchController,
@@ -101,15 +84,13 @@ class _UserDataPageState extends State<UserDataPage> {
                   prefixIcon: Icon(
                     Icons.search,
                     color: Colors.white,
-                    size: MediaQuery.of(context).size.width * 0.06,
+                    size: 20, // Adjust the icon size
                   ),
                   filled: true,
                   fillColor: Color(0xFF323232),
-                  contentPadding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                  contentPadding: EdgeInsets.all(20), // Adjust padding
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.1),
+                    borderRadius: BorderRadius.circular(30), // Adjust border radius
                     borderSide: BorderSide(color: Color(0xFF323232)),
                   ),
                 ),
@@ -143,109 +124,90 @@ class _UserDataPageState extends State<UserDataPage> {
                           document.data() as Map<String, dynamic>;
                       return Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.04,
-                            vertical:
-                                MediaQuery.of(context).size.height * 0.01),
-                        child: Container(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.04),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[900],
-                            borderRadius: BorderRadius.circular(
-                                MediaQuery.of(context).size.width * 0.05),
-                          ),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius:
-                                    MediaQuery.of(context).size.width * 0.09,
-                                backgroundImage: NetworkImage(
-                                  data['profile_picture'],
+                            vertical: MediaQuery.of(context).size.height * 0.01), // Increased gap between boxes
+                        child: Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.55, // Further decreased the width
+                            padding: EdgeInsets.all(15), // Adjust padding
+                            decoration: BoxDecoration(
+                              color: Colors.grey[900],
+                              borderRadius: BorderRadius.circular(30), // Increased border radius
+                            ),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: MediaQuery.of(context).size.width * 0.05, // Reduced the avatar size
+                                  backgroundImage: NetworkImage(
+                                    data['profile_picture'],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.04),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      child: Text(
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width * 0.04),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
                                         "${data['name']}",
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.04,
+                                          fontSize: 20, // Adjust the font size
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.001),
-                                    Text(
-                                      "${data['faculty']}",
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 201, 201, 201),
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.03,
+                                      SizedBox(height: 4), // Adjust spacing
+                                      Text(
+                                        "${data['faculty']}",
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 201, 201, 201),
+                                          fontSize: 18, // Adjust the font size
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      "Branch - ${data['subfaculty']}",
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 201, 201, 201),
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.03,
+                                      Text(
+                                        "Branch - ${data['subfaculty']}",
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 201, 201, 201),
+                                          fontSize: 18, // Adjust the font size
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      "Sem - ${data['semester']}",
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 201, 201, 201),
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.03,
+                                      Text(
+                                        "Sem - ${data['semester']}",
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 201, 201, 201),
+                                          fontSize: 18, // Adjust the font size
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color:
-                                      const Color.fromARGB(255, 201, 201, 201)
-                                          .withOpacity(0.2),
-                                ),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
+                                    ],
                                   ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => userdata_edit(
-                                                userData: data,
-                                              )),
-                                    );
-                                    // Add functionality for edit here
-                                  },
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: const Color.fromARGB(255, 201, 201, 201)
+                                        .withOpacity(0.2),
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                      size: 20, // Adjust icon size
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => userdata_edit(
+                                                  userData: data,
+                                                )),
+                                      );
+                                      // Add functionality for edit here
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
