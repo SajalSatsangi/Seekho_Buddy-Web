@@ -59,6 +59,73 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
   String? _selectedSemester;
   String? _selectedSubbranch;
 
+  List<String> _faculties = [];
+  Map<String, List<String>> _subfaculties = {};
+  Map<String, List<String>> _semesters = {};
+  Map<String, List<String>> _subbranches = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDropdownData();
+  }
+
+  Future<void> _fetchDropdownData() async {
+    try {
+      // Fetch faculties
+      var facultySnapshot = await FirebaseFirestore.instance.collection('faculties').get();
+      List<String> faculties = facultySnapshot.docs.map((doc) => doc.id).toList();
+
+      // Fetch subfaculties, semesters, and subbranches
+      Map<String, List<String>> subfaculties = {};
+      Map<String, List<String>> semesters = {};
+      Map<String, List<String>> subbranches = {};
+
+      for (var facultyId in faculties) {
+        var subfacultySnapshot = await FirebaseFirestore.instance
+            .collection('faculties')
+            .doc(facultyId)
+            .collection('subfaculties')
+            .get();
+        subfaculties[facultyId] = subfacultySnapshot.docs.map((doc) => doc.id).toList();
+
+        for (var subfacultyId in subfaculties[facultyId]!) {
+          var semesterSnapshot = await FirebaseFirestore.instance
+              .collection('faculties')
+              .doc(facultyId)
+              .collection('subfaculties')
+              .doc(subfacultyId)
+              .collection('semesters')
+              .get();
+          semesters['${facultyId}_$subfacultyId'] = semesterSnapshot.docs.map((doc) => doc.id).toList();
+
+          for (var semesterId in semesters['${facultyId}_$subfacultyId']!) {
+            var subbranchSnapshot = await FirebaseFirestore.instance
+                .collection('faculties')
+                .doc(facultyId)
+                .collection('subfaculties')
+                .doc(subfacultyId)
+                .collection('semesters')
+                .doc(semesterId)
+                .collection('subbranches')
+                .get();
+            subbranches['${facultyId}_${subfacultyId}_${semesterId}'] = subbranchSnapshot.docs.map((doc) => doc.id).toList();
+          }
+        }
+      }
+
+      setState(() {
+        _faculties = faculties;
+        _subfaculties = subfaculties;
+        _semesters = semesters;
+        _subbranches = subbranches;
+      });
+    } catch (e) {
+      // Handle errors
+      print('Error fetching dropdown data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,7 +246,7 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                               SizedBox(height: spacingHeight),
                               _buildDropdown(
                                 value: _selectedFaculty,
-                                items: faculties,
+                                items: _faculties,
                                 hintText: 'Faculty',
                                 icon: Icons.school,
                                 onChanged: (value) {
@@ -203,7 +270,7 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                               SizedBox(height: spacingHeight),
                               _buildDropdown(
                                 value: _selectedSubfaculty,
-                                items: subfaculties[_selectedFaculty] ?? [],
+                                items: _subfaculties[_selectedFaculty] ?? [],
                                 hintText: 'Branch',
                                 icon: Icons.new_label,
                                 onChanged: (value) {
@@ -226,9 +293,9 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                               SizedBox(height: spacingHeight),
                               _buildDropdown(
                                 value: _selectedSemester,
-                                items: semesters[_selectedSubfaculty] ?? [],
+                                items: _semesters['${_selectedFaculty}_${_selectedSubfaculty}'] ?? [],
                                 hintText: 'Semester',
-                                icon: Icons.calendar_month,
+                                icon: Icons.calendar_today,
                                 onChanged: (value) {
                                   setState(() {
                                     _selectedSemester = value;
@@ -248,15 +315,19 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                               SizedBox(height: spacingHeight),
                               _buildDropdown(
                                 value: _selectedSubbranch,
-                                items: subbranches[
-                                        '${_selectedFaculty}_${_selectedSubfaculty}_${_selectedSemester}'] ??
-                                    [],
-                                hintText: 'Specialization',
-                                icon: Icons.branding_watermark,
+                                items: _subbranches['${_selectedFaculty}_${_selectedSubfaculty}_${_selectedSemester}'] ?? [],
+                                hintText: 'Subbranch',
+                                icon: Icons.layers,
                                 onChanged: (value) {
                                   setState(() {
                                     _selectedSubbranch = value;
                                   });
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please select a subbranch';
+                                  }
+                                  return null;
                                 },
                                 height: inputFieldHeight,
                                 iconSize: iconSize,
@@ -264,7 +335,7 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                               ),
                               SizedBox(height: spacingHeight * 2),
                               ElevatedButton(
-                                onPressed: _signUp,
+                                onPressed: _register,
                                 style: ElevatedButton.styleFrom(
                                   foregroundColor: Colors.white,
                                   backgroundColor: const Color.fromRGBO(66, 66, 66, 1),
@@ -273,7 +344,10 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                                     borderRadius: BorderRadius.circular(50),
                                   ),
                                 ),
-                                child: Text('Sign Up'),
+                                child: Text(
+                                  'Sign Up',
+                                  style: TextStyle(fontSize: fontSizeSubtitle),
+                                ),
                               ),
                               SizedBox(height: spacingHeight * 2.5),
                               Row(
@@ -321,6 +395,7 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                                   ),
                                 ],
                               ),
+                              SizedBox(height: spacingHeight),
                             ],
                           ),
                         ),
@@ -336,21 +411,18 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
     );
   }
 
-  Future<void> _signUp() async {
+  Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
 
         String uid = userCredential.user!.uid;
 
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(_emailController.text)
-            .set({
+        await FirebaseFirestore.instance.collection('users').doc(_emailController.text).set({
           'uid': uid,
           'email': _emailController.text,
           'name': _nameController.text,
@@ -363,10 +435,7 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
           'role': 'student',
         });
 
-        await sendWelcomeEmail(
-          _emailController.text,
-          _nameController.text,
-        );
+        await sendWelcomeEmail(_emailController.text, _nameController.text);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -439,19 +508,13 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                 controller: controller,
                 obscureText: obscureText,
                 keyboardType: keyboardType,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: fontSize),
+                style: TextStyle(color: Colors.white, fontSize: fontSize),
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: TextStyle(
-                      color: Colors.white70,
-                      fontSize: fontSize),
+                  hintStyle: TextStyle(color: Colors.white70, fontSize: fontSize),
                   filled: true,
                   fillColor: Colors.grey.shade800,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10).copyWith(
-                    left: 10,
-                  ),
+                  contentPadding: EdgeInsets.symmetric(vertical: 10).copyWith(left: 10),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide.none,
@@ -505,24 +568,17 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                 }).toList(),
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: TextStyle(
-                      color: Colors.white70,
-                      fontSize: fontSize),
+                  hintStyle: TextStyle(color: Colors.white70, fontSize: fontSize),
                   filled: true,
                   fillColor: Colors.grey.shade800,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: (height - 50) / 2,
-                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: (height - 50) / 2),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50.0),
                     borderSide: BorderSide.none,
                   ),
                 ),
                 validator: validator,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: fontSize),
+                style: TextStyle(color: Colors.white, fontSize: fontSize),
                 iconEnabledColor: Colors.white,
                 dropdownColor: Colors.grey.shade800,
               ),
