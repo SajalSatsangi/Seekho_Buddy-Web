@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:seekhobuddy/LoginPage.dart';
 // import 'package:seekhobuddy/emailVerificationWaiting.dart';
-import 'package:seekhobuddy/dropdown_data.dart';
+// import 'package:seekhobuddy/dropdown_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:seekhobuddy/home.dart';
@@ -316,7 +316,7 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                               _buildDropdown(
                                 value: _selectedSubbranch,
                                 items: _subbranches['${_selectedFaculty}_${_selectedSubfaculty}_${_selectedSemester}'] ?? [],
-                                hintText: 'Subbranch',
+                                hintText: 'Specialization',
                                 icon: Icons.layers,
                                 onChanged: (value) {
                                   setState(() {
@@ -325,7 +325,7 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                                 },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please select a subbranch';
+                                    return 'Please select a Specialization';
                                   }
                                   return null;
                                 },
