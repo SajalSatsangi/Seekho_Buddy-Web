@@ -5,6 +5,7 @@ import 'package:seekhobuddy/AdminScreens/materialVerification.dart';
 import 'package:seekhobuddy/AdminScreens/student_verification.dart';
 import '../Profile/editprofile.dart';
 import 'UsersData.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfileScreenAdmin extends StatelessWidget {
   @override
@@ -34,6 +35,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   User? user = FirebaseAuth.instance.currentUser;
   DocumentSnapshot? userData;
+  bool isLoading = false;
+  Key _profileImageKey = UniqueKey();
 
   @override
   void initState() {
@@ -42,18 +45,39 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> fetchUserData() async {
-    if (user != null) {
-      var querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('uid', isEqualTo: user!.uid)
-          .get();
+    setState(() {
+      isLoading = true;
+    });
 
-      if (querySnapshot.docs.isNotEmpty) {
+    if (user != null) {
+      try {
+        var querySnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .where('uid', isEqualTo: user!.uid)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          setState(() {
+            userData = querySnapshot.docs.first;
+            _profileImageKey = UniqueKey(); // Force image reload
+          });
+        }
+      } catch (e) {
+        print("Error fetching user data: $e");
+      } finally {
         setState(() {
-          userData = querySnapshot.docs.first;
+          isLoading = false;
         });
       }
+    } else {
+      setState(() {
+        isLoading = false;
+      });
     }
+  }
+
+  Future<void> refreshData() async {
+    await fetchUserData();
   }
 
   @override
@@ -66,9 +90,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
         return Scaffold(
           appBar: _buildAppBar(isDesktop, screenWidth, screenHeight),
-          body: userData == null
+          body: isLoading
               ? Center(child: CircularProgressIndicator())
-              : _buildProfileContent(isDesktop, screenWidth, screenHeight),
+              : (userData == null
+                  ? Center(child: Text("No user data available"))
+                  : _buildProfileContent(isDesktop, screenWidth, screenHeight)),
         );
       },
     );
@@ -95,6 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Row(
               children: <Widget>[
+                _buildIconButton(Icons.refresh, refreshData, iconSize),
                 _buildIconButton(Icons.edit, () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
                 }, iconSize),
@@ -144,7 +171,17 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 CircleAvatar(
                   radius: iconSize,
-                  backgroundImage: NetworkImage(userData!['profile_picture']),
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      key: _profileImageKey,
+                      imageUrl: userData!['profile_picture'],
+                      placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fit: BoxFit.cover,
+                      width: iconSize * 2,
+                      height: iconSize * 2,
+                    ),
+                  ),
                 ),
                 SizedBox(height: spacingHeight),
                 Text(

@@ -1,12 +1,9 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'edit.dart'; // Import the EditField screen
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'edit.dart';
+import 'edit_profile_picture.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -38,66 +35,28 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  Future<void> updateProfilePicture() async {
-  final picker = ImagePicker();
-  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-  if (pickedFile != null) {
-    try {
-      // Retrieve the user's name
-      String userName = userData!.data()!['name'];
-      // Construct the file path using the user's name
-      String filePath = 'profile_pictures/${userName}.png';
-      Reference ref = FirebaseStorage.instance.ref(filePath);
-      UploadTask uploadTask;
-
-      if (kIsWeb) {
-        // For web platform
-        final bytes = await pickedFile.readAsBytes();
-        uploadTask = ref.putData(bytes);
-      } else {
-        // For native platforms
-        Uint8List imageData = await pickedFile.readAsBytes();
-        
-        // Compress the image (only for native platforms)
-        Uint8List? compressedData = await FlutterImageCompress.compressWithList(
-          imageData,
-          minWidth: 1024,
-          minHeight: 768,
-          quality: 88,
-        );
-
-        uploadTask = ref.putData(compressedData);
-      }
-
-      TaskSnapshot taskSnapshot = await uploadTask;
-      String downloadURL = await taskSnapshot.ref.getDownloadURL();
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userData!.id)
-          .update({'profile_picture': downloadURL});
-
-      // Fetch updated user data from Firestore
-      await fetchUserData();
-    } catch (e) {
-      print(e);
-      // Show an error message to the user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to upload profile picture. Please try again.'),
+  Future<void> navigateToEditProfilePicture() async {
+    if (userData != null) {
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditProfilePicture(
+            currentImageUrl: userData!.data()!['profile_picture'],
+            userName: userData!.data()!['name'],
+          ),
         ),
       );
+      if (result == true) {
+        await fetchUserData();
+      }
     }
   }
-}
 
   Future<void> navigateToEditField(String field, String currentValue) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            EditField(field: field, currentValue: currentValue),
+        builder: (context) => EditField(field: field, currentValue: currentValue),
       ),
     );
     if (result != null) {
@@ -134,10 +93,22 @@ class _EditProfileState extends State<EditProfile> {
                       padding: EdgeInsets.all(16),
                       children: [
                         GestureDetector(
-                          onTap: updateProfilePicture,
+                          onTap: navigateToEditProfilePicture,
                           child: CircleAvatar(
                             radius: isDesktop ? 80 : constraints.maxWidth * 0.15,
-                            backgroundImage: NetworkImage(userData!.data()!['profile_picture']),
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                imageUrl: userData!.data()!['profile_picture'],
+                                placeholder: (context, url) => CircularProgressIndicator(),
+                                errorWidget: (context, url, error) {
+                                  print('Error loading image: $error');
+                                  return Icon(Icons.error);
+                                },
+                                fit: BoxFit.cover,
+                                width: (isDesktop ? 80 : constraints.maxWidth * 0.15) * 2,
+                                height: (isDesktop ? 80 : constraints.maxWidth * 0.15) * 2,
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(height: 16),
@@ -167,9 +138,10 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+
   Widget _buildInfoContainer(String field, String value, bool isDesktop, {bool isHeader = false}) {
     return GestureDetector(
-      onTap: isHeader ? () => navigateToEditField(field, value) : null,
+      onTap: () => navigateToEditField(field, value),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 6),
         padding: EdgeInsets.all(12),
@@ -182,9 +154,7 @@ class _EditProfileState extends State<EditProfile> {
           child: Text(
             value,
             style: TextStyle(
-              fontSize: isDesktop
-                  ? (isHeader ? 24 : 16)
-                  : (isHeader ? 20 : 14),
+              fontSize: isDesktop ? (isHeader ? 24 : 16) : (isHeader ? 20 : 14),
               fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
               color: isHeader ? Colors.white : Color.fromARGB(255, 185, 185, 185),
             ),
