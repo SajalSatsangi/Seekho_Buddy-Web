@@ -1,0 +1,91 @@
+{
+    "Material DB": {
+        "Faculty of Engineering": {
+            "branches": {
+                "Mechanical": {
+                    "Semester 3": {
+                        "ENH101": {
+                            "Additional Assignment": {
+                                "AA1": {
+                                    "pdfName": "AA1",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "AA2": {
+                                    "pdfName": "AA2",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "materialName": "Additional Assignment"
+                            },
+                            "QB & Syllabus": {
+                                "QB": {
+                                    "pdfName": "QB",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "Syllabus": {
+                                    "pdfName": "Syllabus",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "materialName": "QB & Syllabus"
+                            },
+                            "Question Papers": {
+                                "CT1": {
+                                    "pdfName": "CT1",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "CT2": {
+                                    "pdfName": "CT2",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "ENDSEM": {
+                                    "pdfName": "ENDSEM",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "materialName": "Question Papers"
+                            },
+                            "Book": {
+                                "Book1": {
+                                    "pdfName": "XYZ",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "Book2": {
+                                    "pdfName": "ABC",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "materialName": "Book"
+                            },
+                            "Notes": {
+                                "Unit1": {
+                                    "pdfName": "Unit1",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "Unit2": {
+                                    "pdfName": "Unit2",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "Unit3": {
+                                    "pdfName": "Unit3",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "Unit4": {
+                                    "pdfName": "Unit4",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "Unit5": {
+                                    "pdfName": "Unit5",
+                                    "link": "https://drive.google.com/uc?export=view&id=1pCaNxKodk5lq6rtyIr9QsMV-RVOGdBoB"
+                                },
+                                "materialName": "Notes"
+                            },
+                            "subjectName": "ENH101"
+                        },
+                        "semesterName": "Semester 3"
+                    },
+
+                    "branchName": "Mechanical"
+                }
+            },
+            "description": "Description for Faculty of Engineering",
+            "name": "Faculty of Engineering"
+        }
+    }
+}

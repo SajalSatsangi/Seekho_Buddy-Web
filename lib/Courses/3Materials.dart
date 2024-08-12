@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:seekhobuddy/Courses/4PdfViewer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Materialpage extends StatelessWidget {
   final Map material;
   final String materialName;
 
+  
   Materialpage({
     required this.materialName,
     required this.material,
   });
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceSafariVC: false, forceWebView: false);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +50,11 @@ class Materialpage extends StatelessWidget {
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: () => Navigator.of(context).pop(),
                 child: Text('Cancel'),
               ),
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: () => Navigator.of(context).pop(),
                 child: Text('Add'),
               ),
             ],
@@ -63,35 +68,31 @@ class Materialpage extends StatelessWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isDesktop = constraints.maxWidth > 600;
+          final contentWidth = isDesktop ? 600.0 : constraints.maxWidth;
+
           return Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 1200),
+              constraints: BoxConstraints(maxWidth: contentWidth),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isDesktop ? 32 : 16,
-                        vertical: isDesktop ? 20 : 10,
-                      ),
+                      padding: EdgeInsets.all(16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Row(
                             children: [
                               IconButton(
-                                icon: Icon(Icons.arrow_back_ios,
-                                    color: Colors.white),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
+                                icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                                onPressed: () => Navigator.of(context).pop(),
                               ),
-                              SizedBox(width: isDesktop ? 20 : 10),
+                              SizedBox(width: 10),
                               Text(
                                 materialName,
                                 style: TextStyle(
-                                  fontSize: isDesktop ? 36 : 28,
+                                  fontSize: isDesktop ? 32 : 24,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -111,73 +112,56 @@ class Materialpage extends StatelessWidget {
 
                         return Padding(
                           padding: EdgeInsets.symmetric(
-                            vertical: isDesktop ? 10 : 7,
-                            horizontal: isDesktop ? 40 : 27,
-                          ),
-                          child: GestureDetector(
-                            child: Container(
-                              height: isDesktop ? 90 : 70,
-                              decoration: BoxDecoration(
-                                color: Color.fromRGBO(50, 50, 50, 1),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(isDesktop ? 20 : 12),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.folder,
-                                          color: Colors.white,
-                                          size: isDesktop ? 28 : 24,
-                                        ),
-                                        SizedBox(width: isDesktop ? 16 : 8),
-                                        Text(
-                                          AA['pdfName'] ?? 'Default AA Name',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: isDesktop ? 20 : 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PdfViewer(AA: AA),
-                                          ),
-                                        );
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.white),
-                                        padding: MaterialStateProperty.all<
-                                            EdgeInsets>(
-                                          EdgeInsets.symmetric(
-                                            horizontal: isDesktop ? 24 : 16,
-                                            vertical: isDesktop ? 12 : 8,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        'View',
-                                        textAlign: TextAlign.center,
+                              vertical: 8, horizontal: isDesktop ? 24 : 16),
+                          child: Container(
+                            height: isDesktop ? 80 : 70,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(50, 50, 50, 1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.school, color: Colors.white),
+                                      SizedBox(width: 12),
+                                      Text(
+                                        AA['pdfName'] ?? 'Default AA Name',
                                         style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: isDesktop ? 18 : 14,
+                                          color: Colors.white,
+                                          fontSize: isDesktop ? 18 : 16,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (AA['link'] != null) {
+                                        _launchURL(AA['link']);
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                              content: Text('PDF URL not available')),
+                                        );
+                                      }
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(Colors.white),
                                     ),
-                                  ],
-                                ),
+                                    child: Text(
+                                      'View',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: isDesktop ? 16 : 14,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
