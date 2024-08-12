@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:seekhobuddy/Other%20Cources/7PdfViewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Materialpage extends StatelessWidget {
