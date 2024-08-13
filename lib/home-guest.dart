@@ -5,7 +5,6 @@ import 'package:seekhobuddy/Courses.dart';
 import 'package:seekhobuddy/LoginPage.dart';
 import 'package:seekhobuddy/NewHelp.dart';
 import 'package:seekhobuddy/donation.dart';
-import 'package:seekhobuddy/AdminScreens/Profile-Admin.dart';
 import 'package:seekhobuddy/ComingSoonPage.dart';
 import 'package:seekhobuddy/aichat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,13 +46,53 @@ class _HomeState extends State<HomeGuest> {
   static List<Widget> _widgetOptions = <Widget>[
     ExploreScreen(),
     AiChat(),
-    ProfileScreenAdmin(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onItemTapped(int index) async {
+    if (index == 1) {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        _showLoginAlert(context);
+      } else {
+        setState(() {
+          _selectedIndex = index;
+        });
+      }
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
+  void _showLoginAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Login Required'),
+          content: const Text('You need to log in to access this feature.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: const Text('Login'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -68,8 +107,6 @@ class _HomeState extends State<HomeGuest> {
             label: 'Home',
           ),
           const BottomNavigationBarItem(
-            //icon: Icon(Icons.assistant),
-            // icon: Icon(Icons.cruelty_free),
             icon: Icon(Icons.discord),
             label: 'AI',
           ),
@@ -249,10 +286,7 @@ class ExploreScreen extends StatelessWidget {
       Widget nextPage, double width, double height) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => nextPage),
-        );
+        _showLoginAlert(context);
       },
       child: Container(
         width: width,
@@ -285,6 +319,36 @@ class ExploreScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showLoginAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Login Required'),
+          content: const Text('You need to log in to access this feature.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: const Text('Login'),
+            ),
+          ],
+        );
+      },
     );
   }
 
