@@ -68,12 +68,10 @@ class _HomeState extends State<Home> {
             label: 'Home',
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            //icon: Icon(Icons.assistant),
+            // icon: Icon(Icons.cruelty_free),
+            icon: Icon(Icons.discord),
+            label: 'AI',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -104,40 +102,6 @@ class ExploreScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _showLogoutDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Logout'),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Are you sure you want to log out?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _logout(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,17 +117,6 @@ class ExploreScreen extends StatelessWidget {
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.power_settings_new,
-              color: Colors.grey,
-            ),
-            onPressed: () => _showLogoutDialog(context),
-            tooltip: 'Log Out',
-            padding: const EdgeInsets.only(right: 25.0),
-          ),
-        ],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
