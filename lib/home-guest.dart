@@ -29,19 +29,19 @@ class HomePage extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.white),
         ),
       ),
-      home: Home(),
+      home: HomeGuest(),
     );
   }
 }
 
-class Home extends StatefulWidget {
-  Home({super.key});
+class HomeGuest extends StatefulWidget {
+  HomeGuest({super.key});
 
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<HomeGuest> {
   int _selectedIndex = 0;
 
   static List<Widget> _widgetOptions = <Widget>[
