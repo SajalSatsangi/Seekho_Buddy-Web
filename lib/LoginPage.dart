@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home.dart';
 import 'SignPage.dart';
+import 'home-guest.dart';
 
 void main() {
   runApp(LoginPage());
@@ -102,35 +103,41 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
       );
     }
   }
-  
-  
+
+  void _loginAsGuest() {
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => HomeGuest()),
+  );
+}
+
   Future<void> _resetPassword() async {
     try {
       final rollNumber = _rollNumberController.text.trim();
 
       // Check if roll number field is empty
-    if (rollNumber.isEmpty) {
-      // Show dialog with message
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("ERROR!"),
-            content: Text(
-                "Please enter your roll number and then click on Forgot Password for resetting your Password."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
+      if (rollNumber.isEmpty) {
+        // Show dialog with message
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("ERROR!"),
+              content: Text(
+                  "Please enter your roll number and then click on Forgot Password for resetting your Password."),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
 
       // Query Firestore to get user document based on roll number
       final QuerySnapshot querySnapshot = await _firestore
@@ -204,7 +211,6 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,8 +224,10 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
             double padding = isDesktop ? 40 : constraints.maxWidth * 0.08;
             double iconSize = isDesktop ? 40 : constraints.maxWidth * 0.1;
             double fontSizeTitle = isDesktop ? 32 : constraints.maxWidth * 0.06;
-            double fontSizeSubtitle = isDesktop ? 18 : constraints.maxWidth * 0.04;
-            double inputFieldHeight = isDesktop ? 50 : constraints.maxHeight * 0.04;
+            double fontSizeSubtitle =
+                isDesktop ? 18 : constraints.maxWidth * 0.04;
+            double inputFieldHeight =
+                isDesktop ? 50 : constraints.maxHeight * 0.04;
             double buttonHeight = isDesktop ? 60 : constraints.maxHeight * 0.06;
 
             return SingleChildScrollView(
@@ -235,7 +243,9 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                           'assets/loginPage.png',
                           height: isDesktop ? 250 : constraints.maxHeight * 0.3,
                         ),
-                        SizedBox(height: isDesktop ? 20 : constraints.maxHeight * 0.02),
+                        SizedBox(
+                            height:
+                                isDesktop ? 20 : constraints.maxHeight * 0.02),
                         Text(
                           'Seekho Buddy',
                           style: TextStyle(
@@ -244,7 +254,9 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: isDesktop ? 10 : constraints.maxHeight * 0.01),
+                        SizedBox(
+                            height:
+                                isDesktop ? 10 : constraints.maxHeight * 0.01),
                         Text(
                           'Access study materials efficiently',
                           style: TextStyle(
@@ -252,7 +264,9 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                             fontSize: fontSizeSubtitle,
                           ),
                         ),
-                        SizedBox(height: isDesktop ? 30 : constraints.maxHeight * 0.03),
+                        SizedBox(
+                            height:
+                                isDesktop ? 30 : constraints.maxHeight * 0.03),
                         _buildInputField(
                           icon: Icons.menu_book_sharp,
                           hintText: 'Roll Number',
@@ -261,7 +275,9 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                           padding: padding,
                           inputFieldHeight: inputFieldHeight,
                         ),
-                        SizedBox(height: isDesktop ? 20 : constraints.maxHeight * 0.03),
+                        SizedBox(
+                            height:
+                                isDesktop ? 20 : constraints.maxHeight * 0.03),
                         _buildInputField(
                           icon: Icons.search,
                           hintText: 'Password',
@@ -271,9 +287,12 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                           inputFieldHeight: inputFieldHeight,
                           isPassword: true,
                         ),
-                        SizedBox(height: isDesktop ? 10 : constraints.maxHeight * 0.01),
+                        SizedBox(
+                            height:
+                                isDesktop ? 10 : constraints.maxHeight * 0.01),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: padding * 1.5),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: padding * 1.5),
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(
@@ -288,7 +307,9 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: isDesktop ? 30 : constraints.maxHeight * 0.04),
+                        SizedBox(
+                            height:
+                                isDesktop ? 30 : constraints.maxHeight * 0.04),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: padding),
                           child: ElevatedButton(
@@ -304,9 +325,13 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: isDesktop ? 30 : constraints.maxHeight * 0.04),
+                        SizedBox(
+                            height:
+                                isDesktop ? 30 : constraints.maxHeight * 0.04),
                         _buildDivider(padding, fontSizeSubtitle),
-                        SizedBox(height: isDesktop ? 20 : constraints.maxHeight * 0.025),
+                        SizedBox(
+                            height:
+                                isDesktop ? 20 : constraints.maxHeight * 0.025),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -322,7 +347,8 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SignUpPage()),
+                                  MaterialPageRoute(
+                                      builder: (context) => SignUpPage()),
                                 );
                               },
                               child: Text(
@@ -334,6 +360,24 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                               ),
                             ),
                           ],
+                        ),
+                        SizedBox(
+                            height:
+                                isDesktop ? 20 : constraints.maxHeight * 0.025),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          child: ElevatedButton(
+                            onPressed: _loginAsGuest,
+                            child: Text('Login as Guest'),
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.grey.shade800,
+                              minimumSize: Size(double.infinity, buttonHeight),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -376,7 +420,9 @@ class _StudyHubLoginScreenState extends State<StudyHubLoginScreen> {
                 hintStyle: TextStyle(color: Colors.white70),
                 filled: true,
                 fillColor: Colors.grey.shade800,
-                contentPadding: EdgeInsets.symmetric(vertical: inputFieldHeight / 2).copyWith(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: inputFieldHeight / 2)
+                        .copyWith(
                   left: 20,
                 ),
                 border: OutlineInputBorder(
